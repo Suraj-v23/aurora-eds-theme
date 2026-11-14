@@ -1,0 +1,44 @@
+.accordion {
+  text-align: left;
+}
+
+.accordion details {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.accordion summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 0;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion summary::after {
+  content: "+";
+  flex-shrink: 0;
+  color: var(--link-color);
+  font-size: 1.5em;
+  line-height: 1;
+  transition: transform 0.2s;
+}
+
+.accordion details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.accordion summary p {
+  margin: 0;
+}
+
+.accordion .accordion-body {
+  padding-bottom: 20px;
+  color: var(--dark-color);
+}

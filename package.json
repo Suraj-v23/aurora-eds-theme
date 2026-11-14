@@ -1,0 +1,31 @@
+{
+  "name": "aurora-eds-theme",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Aurora: a free SaaS landing page theme for AEM Edge Delivery Services",
+  "scripts": {
+    "lint:js": "eslint .",
+    "lint:css": "stylelint \"blocks/**/*.css\" \"styles/*.css\"",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:fix": "npm run lint:js -- --fix && npm run lint:css -- --fix",
+    "dev": "npx -y @adobe/aem-cli up --html-folder drafts --html-mount /"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Suraj-v23/aurora-eds-theme.git"
+  },
+  "author": "Suraj Verma",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Suraj-v23/aurora-eds-theme/issues"
+  },
+  "homepage": "https://github.com/Suraj-v23/aurora-eds-theme#readme",
+  "devDependencies": {
+    "@babel/eslint-parser": "7.29.13",
+    "eslint": "8.57.1",
+    "eslint-config-airbnb-base": "15.0.0",
+    "eslint-plugin-import": "2.32.0",
+    "stylelint": "18.0.0",
+    "stylelint-config-standard": "41.0.0"
+  }
+}

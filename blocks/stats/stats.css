@@ -1,0 +1,23 @@
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 32px;
+  text-align: center;
+}
+
+.stats .stats-value {
+  background: var(--gradient);
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(36px, 6vw, 56px);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.stats .stats-label {
+  color: var(--dark-color);
+}
+
+.stats p {
+  margin: 0;
+}
