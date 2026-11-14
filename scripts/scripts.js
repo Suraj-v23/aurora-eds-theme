@@ -9,6 +9,8 @@ import {
   loadSection,
   loadSections,
   loadCSS,
+  getMetadata,
+  buildBlock,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -54,6 +56,11 @@ async function loadFonts() {
  */
 function buildAutoBlocks(main) {
   try {
+    if (getMetadata('breadcrumb') === 'on' && !main.querySelector('.breadcrumb')) {
+      const section = document.createElement('div');
+      section.append(buildBlock('breadcrumb', ''));
+      main.prepend(section);
+    }
     // auto load `*/fragments/*` references
     const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
     if (fragments.length > 0) {
@@ -141,6 +148,14 @@ export function decorateMain(main) {
  */
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
+  try { // apply saved theme choices before first paint
+    const saved = JSON.parse(localStorage.getItem('aurora-theme'));
+    const root = document.documentElement;
+    ['theme', 'font', 'motion'].forEach((k) => { if (saved[k]) root.dataset[k] = saved[k]; });
+    Object.entries(saved.vars || {}).forEach(([k, v]) => root.style.setProperty(k, v));
+  } catch (e) {
+    // no saved theme
+  }
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
@@ -169,7 +184,8 @@ async function loadEager(doc) {
  * @param {Element} main The main element
  */
 function revealOnScroll(main) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    || document.documentElement.dataset.motion === 'off') return;
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;
@@ -181,6 +197,18 @@ function revealOnScroll(main) {
     // only sections still below the fold animate; anything already visible stays put
     if (section.getBoundingClientRect().top < window.innerHeight) return;
     section.classList.add('reveal');
+    if (section.classList.contains('stagger')) {
+      let i = 0;
+      section.querySelectorAll('.block').forEach((b) => {
+        const kids = [...b.children];
+        const items = kids.length === 1 && /^[UO]L$/.test(kids[0].tagName) ? [...kids[0].children] : kids;
+        items.forEach((el) => {
+          el.classList.add('stagger-item');
+          el.style.setProperty('--i', i);
+          i += 1;
+        });
+      });
+    }
     observer.observe(section);
   });
 }
@@ -200,6 +228,10 @@ async function loadLazy(doc) {
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
   revealOnScroll(main);
   loadFonts();
+  if (getMetadata('theme-panel') !== 'off') {
+    loadCSS(`${window.hlx.codeBasePath}/styles/theme-panel.css`);
+    import('./theme-panel.js');
+  }
 }
 
 /**

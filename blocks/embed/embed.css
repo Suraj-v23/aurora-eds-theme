@@ -23,8 +23,8 @@
   height: 100%;
   border: 0;
   background:
-    radial-gradient(60% 80% at 80% 0%, rgb(225 29 72 / 35%), transparent 60%),
-    radial-gradient(50% 70% at 10% 10%, rgb(67 56 202 / 60%), transparent 60%),
+    radial-gradient(60% 80% at 80% 0%, color-mix(in srgb, var(--accent-3) 35%, transparent), transparent 60%),
+    radial-gradient(50% 70% at 10% 10%, color-mix(in srgb, var(--accent-color) 45%, transparent), transparent 60%),
     var(--night-color);
   color: #fff;
   font-weight: 600;
@@ -38,8 +38,8 @@
   width: 72px;
   height: 72px;
   border-radius: 50%;
-  background-color: #fff;
-  color: var(--night-color);
+  background-color: var(--accent-color);
+  color: var(--on-accent);
   font-size: 24px;
   transition: transform 0.2s;
 }

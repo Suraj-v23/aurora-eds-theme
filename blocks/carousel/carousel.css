@@ -65,7 +65,7 @@
 
 .carousel .carousel-button:hover {
   background-color: var(--link-color);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 .carousel .carousel-prev::before {

@@ -12,7 +12,7 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   padding: 32px 28px;
-  background-color: var(--background-color);
+  background-color: var(--surface-color);
 }
 
 .pricing .pricing-featured {
@@ -27,7 +27,7 @@
   border-radius: 99px;
   padding: 4px 14px;
   background: var(--gradient);
-  color: #fff;
+  color: var(--on-accent);
   font-size: var(--body-font-size-xs);
   font-weight: 600;
 }
@@ -57,9 +57,19 @@
 }
 
 .pricing li {
+  position: relative;
   padding: 6px 0 6px 28px;
-  background: no-repeat left 0.6em / 16px
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="%239333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m2 8.5 4 4 8-9"/></svg>');
+}
+
+.pricing li::before {
+  content: "";
+  position: absolute;
+  top: 0.75em;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background: var(--accent-color);
+  mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="black" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m2 8.5 4 4 8-9"/></svg>') center / contain no-repeat;
 }
 
 .pricing p.button-wrapper {

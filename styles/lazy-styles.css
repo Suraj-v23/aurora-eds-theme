@@ -1,12 +1,53 @@
 /* add global styles that can be loaded post LCP here */
 
+/* scroll reveal: section classes fade-up (default), zoom, slide-left, slide-right, stagger */
 main > .section.reveal > div {
   opacity: 0;
   transform: translateY(28px);
   transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
+main > .section.reveal.zoom > div {
+  transform: scale(0.92);
+}
+
+main > .section.reveal.slide-left > div {
+  transform: translateX(-64px);
+}
+
+main > .section.reveal.slide-right > div {
+  transform: translateX(64px);
+}
+
 main > .section.reveal.in-view > div {
+  opacity: 1;
+  transform: none;
+}
+
+main > .section.reveal.stagger > div {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+main > .section.reveal:not(.in-view) .stagger-item {
+  opacity: 0;
+}
+
+main > .section.reveal.in-view .stagger-item {
+  animation: stagger-in 0.6s ease backwards;
+  animation-delay: calc(var(--i) * 90ms);
+}
+
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.97);
+  }
+}
+
+html[data-motion="off"] main > .section.reveal > div,
+html[data-motion="off"] main > .section.reveal .stagger-item {
   opacity: 1;
   transform: none;
 }

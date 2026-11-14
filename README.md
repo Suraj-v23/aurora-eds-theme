@@ -8,10 +8,10 @@ A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services
 
 - No build step, no web fonts, no dependencies at runtime
 - Rebrand the whole site from one block of CSS variables
-- 18 blocks and 5 section styles, each authored as a plain table
+- 24 blocks, 5 theme presets, 5 font styles and a live theme customizer panel, each authored as a plain table
 - Interactive components (tabs, carousel, accordion, modal, embed) in plain JavaScript
 - A live block library page that documents every block
-- Dark sections, scroll reveal, visible focus rings, reduced-motion support
+- Dark by default with a warm orange accent, scroll animations, visible focus rings, reduced-motion support
 
 ## Quick start
 
@@ -34,9 +34,12 @@ Edit the variables at the top of [`styles/styles.css`](styles/styles.css):
 | Variable | Controls |
 |---|---|
 | `--link-color`, `--link-hover-color` | Brand color: buttons, links, highlights |
+| `--background-color`, `--surface-color`, `--light-color` | Page, raised card and alt section backgrounds |
+| `--on-accent` | Text color on accent-filled buttons |
 | `--accent-color` | Check marks, focus ring |
 | `--gradient` | Stat numbers, step numbers, badges, call-to-action band |
-| `--night-color` | Hero and dark section background |
+| `--accent-2`, `--accent-3` | Gradient stops after the accent |
+| `--night-color` | Hero, footer and dark section background |
 | `--radius`, `--shadow` | Card shape and depth |
 | `--body-font-family`, `--heading-font-family` | Fonts (system stack by default) |
 
@@ -69,6 +72,17 @@ Each block is a table in your document. The first row is the block name. See eve
 | **Modal** | One | Button label, dialog content. Native `<dialog>`. |
 | **Embed** | One | YouTube or Vimeo link. Loads the player only after the visitor presses play. |
 
+**New in the redesign**
+
+| Block | Rows | Columns |
+|---|---|---|
+| **Breadcrumb** | Empty, or links | Empty builds Home / path from the URL. Page metadata `breadcrumb` = `on` adds it to the top automatically. |
+| **Marquee** | One row, any cells | Text or logos looping sideways. Pauses on hover. Variant: `Marquee (reverse)`. |
+| **Timeline** | One per event | Date, then heading and text. Alternates sides on desktop. |
+| **Sidebar** | One | Cell 1: list of `#` links (sticky, highlights current heading). Cell 2: content. |
+| **Animated Text** | Two | Row 1: text before. Row 2: list of words to cycle. |
+| **Feature Grid** | One per tile | Optional icon line, heading, text. First tile is larger. Variants: `wide`, `uniform`. |
+
 **From the boilerplate:** Fragment, Header, Footer.
 
 Buttons: make a link **bold** for a primary button, *italic* for a secondary button.
@@ -86,6 +100,15 @@ Add a **Section Metadata** table with a `Style` row. Combine with commas, for ex
 | `light` | Soft grey band |
 | `dark` | Dark band; every block inside adapts |
 | `cta` | Gradient call-to-action band |
+| `fade-up`, `zoom`, `slide-left`, `slide-right`, `stagger` | Scroll animation (fade-up is the default; stagger animates the items inside blocks in sequence) |
+
+## Themes and customizer
+
+- **Presets:** set `data-theme` on `<html>` to `ember` (default), `light`, `midnight`, `forest` or `mono`. Each preset only overrides CSS variables.
+- **Fonts:** `data-font` = `classic`, `modern`, `mono`, `rounded` or `editorial`. System stacks only.
+- **Motion:** `data-motion="off"` disables all animation (reduced-motion users get this automatically).
+- **Customizer panel:** a round button at the bottom right ([`scripts/theme-panel.js`](scripts/theme-panel.js)) lets visitors pick preset, accent color, font and motion. Choices are saved in `localStorage`. Disable it on a page with page metadata `theme-panel` = `off`.
+- **Default theme:** edit the `:root` tokens in `styles/styles.css` (they are the ember theme).
 
 ## Development
 

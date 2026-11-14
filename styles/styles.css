@@ -10,24 +10,29 @@
  * governing permissions and limitations under the License.
  */
 
-:root {
-  /* colors */
-  --background-color: #fffdf9;
-  --light-color: #f6f1e7;
-  --dark-color: #575466;
-  --text-color: #17142b;
-  --link-color: #4338ca;
-  --link-hover-color: #312e81;
-
-  /* aurora theme tokens: change these to rebrand the whole site */
-  --accent-color: #c026d3;
-  --night-color: #14122a;
-  --border-color: #e7dfd0;
+:root,
+[data-theme="ember"] {
+  /* colors: dark ember is the default theme. Change these to rebrand. */
+  --background-color: #141210;
+  --surface-color: #1e1b18;
+  --light-color: #24201c;
+  --dark-color: #a89f94;
+  --text-color: #f3ede6;
+  --link-color: #e8743b;
+  --link-hover-color: #f39060;
+  --accent-color: #e8743b;
+  --accent-2: #f5a524;
+  --accent-3: #e5486b;
+  --on-accent: #1a0e07;
+  --night-color: #0e0c0b;
+  --border-color: #3a332c;
   --radius: 16px;
-  --shadow: 0 18px 40px rgb(23 20 43 / 10%);
-  --gradient: linear-gradient(120deg, #4338ca, #9333ea 55%, #e11d48);
+  --shadow: 0 18px 40px rgb(0 0 0 / 40%);
+  --gradient: linear-gradient(120deg, var(--accent-color), var(--accent-2) 55%, var(--accent-3));
+  --heading-scale: 1;
+  --heading-spacing: -0.01em;
 
-  /* fonts: system stack, zero font downloads */
+  /* fonts: system stacks, zero font downloads */
   --body-font-family: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
   --heading-font-family: "Iowan Old Style", "Palatino Linotype", palatino, georgia, serif;
 
@@ -46,6 +51,95 @@
 
   /* nav height */
   --nav-height: 64px;
+}
+
+[data-theme="light"] {
+  --background-color: #fbf6ee;
+  --surface-color: #fff;
+  --light-color: #f3eadc;
+  --dark-color: #5f564c;
+  --text-color: #231c15;
+  --link-color: #c2410c;
+  --link-hover-color: #9a3412;
+  --accent-color: #ea580c;
+  --on-accent: #fff;
+  --night-color: #1c1410;
+  --border-color: #e2d6c3;
+  --shadow: 0 18px 40px rgb(60 35 10 / 12%);
+}
+
+[data-theme="midnight"] {
+  --background-color: #0a1020;
+  --surface-color: #10192e;
+  --light-color: #15203a;
+  --dark-color: #9aa9c4;
+  --text-color: #e8eefb;
+  --link-color: #22d3ee;
+  --link-hover-color: #67e8f9;
+  --accent-color: #22d3ee;
+  --accent-2: #60a5fa;
+  --accent-3: #a78bfa;
+  --on-accent: #04202a;
+  --night-color: #060a16;
+  --border-color: #25335a;
+}
+
+[data-theme="forest"] {
+  --background-color: #0f1712;
+  --surface-color: #16211a;
+  --light-color: #1b2a20;
+  --dark-color: #9db0a2;
+  --text-color: #e9f2e8;
+  --link-color: #a3e635;
+  --link-hover-color: #bef264;
+  --accent-color: #a3e635;
+  --accent-2: #4ade80;
+  --accent-3: #2dd4bf;
+  --on-accent: #0f1a05;
+  --night-color: #09100b;
+  --border-color: #2b3d30;
+}
+
+[data-theme="mono"] {
+  --background-color: #0a0a0a;
+  --surface-color: #141414;
+  --light-color: #1c1c1c;
+  --dark-color: #a3a3a3;
+  --text-color: #fafafa;
+  --link-color: #fff;
+  --link-hover-color: #d4d4d4;
+  --accent-color: #fff;
+  --accent-2: #a3a3a3;
+  --accent-3: #e5e5e5;
+  --on-accent: #0a0a0a;
+  --night-color: #000;
+  --border-color: #333;
+}
+
+[data-font="classic"] {
+  --heading-font-family: "Iowan Old Style", "Palatino Linotype", palatino, georgia, serif;
+  --body-font-family: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+}
+
+[data-font="modern"] {
+  --heading-font-family: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+  --heading-spacing: -0.035em;
+}
+
+[data-font="mono"] {
+  --heading-font-family: ui-monospace, "SF Mono", menlo, consolas, monospace;
+  --heading-spacing: -0.02em;
+}
+
+[data-font="rounded"] {
+  --heading-font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body-font-family: ui-rounded, "SF Pro Rounded", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+[data-font="editorial"] {
+  --heading-font-family: "Iowan Old Style", "Palatino Linotype", palatino, georgia, serif;
+  --heading-scale: 1.18;
+  --heading-spacing: -0.025em;
 }
 
 @media (width >= 900px) {
@@ -104,13 +198,13 @@ h6 {
   font-family: var(--heading-font-family);
   font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--heading-spacing);
   scroll-margin: 40px;
 }
 
-h1 { font-size: var(--heading-font-size-xxl); }
-h2 { font-size: var(--heading-font-size-xl); }
-h3 { font-size: var(--heading-font-size-l); }
+h1 { font-size: calc(var(--heading-font-size-xxl) * var(--heading-scale)); }
+h2 { font-size: calc(var(--heading-font-size-xl) * var(--heading-scale)); }
+h3 { font-size: calc(var(--heading-font-size-l) * var(--heading-scale)); }
 h4 { font-size: var(--heading-font-size-m); }
 h5 { font-size: var(--heading-font-size-s); }
 h6 { font-size: var(--heading-font-size-xs); }
@@ -133,7 +227,7 @@ pre {
 pre {
   padding: 16px;
   border-radius: 8px;
-  background-color: var(--light-color);
+  background-color: var(--surface-color);
   overflow-x: auto;
   white-space: pre;
 }
@@ -205,7 +299,7 @@ a.button.primary,
 button.button.primary {
   border-color: var(--link-color);
   background-color: var(--link-color);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 a.button.primary:hover,
@@ -214,7 +308,7 @@ button.button.primary:hover,
 button.button.primary:focus-visible {
   border-color: var(--link-hover-color);
   background-color: var(--link-hover-color);
-  color: #fff;
+  color: var(--on-accent);
 }
 
 a.button.primary[aria-disabled="true"],
@@ -260,7 +354,7 @@ a.button.accent,
 button.button.accent {
   border-color: var(--link-color);
   background-color: var(--link-color);
-  color: var(--background-color);
+  color: var(--on-accent);
 }
 
 a.button.accent:hover,
@@ -323,6 +417,8 @@ main > .section:first-of-type {
 /* section metadata */
 main .section.light,
 main .section.highlight {
+  --surface-color: var(--background-color);
+
   background-color: var(--light-color);
   margin: 0;
   padding: 40px 0;
@@ -355,15 +451,16 @@ main .section.narrow > div {
   max-width: 800px;
 }
 
-/* Section Metadata > Style: dark */
+/* Section Metadata > Style: dark (always a deep band, even in the light theme) */
 main .section.dark {
-  --text-color: #fbf8f1;
-  --dark-color: #c9c4dd;
-  --light-color: #1f1c3d;
-  --border-color: #332f5c;
+  --text-color: #f3ede6;
+  --dark-color: #b5ab9f;
+  --light-color: color-mix(in srgb, var(--night-color) 85%, #fff);
+  --surface-color: var(--light-color);
+  --border-color: color-mix(in srgb, var(--night-color) 82%, #fff);
   --background-color: var(--night-color);
-  --link-color: #c4b5fd;
-  --link-hover-color: #ddd6fe;
+  --link-color: var(--accent-color);
+  --link-hover-color: color-mix(in srgb, var(--accent-color) 70%, #fff);
 
   background-color: var(--night-color);
   color: var(--text-color);
@@ -371,20 +468,28 @@ main .section.dark {
 
 /* Section Metadata > Style: cta */
 main .section.cta {
+  --link-color: var(--night-color);
+  --link-hover-color: #000;
+
   background: var(--gradient);
-  color: #fff;
+  color: #1a0e07;
   text-align: center;
 }
 
 main .section.cta a.button.primary {
-  border-color: #fff;
-  background-color: #fff;
-  color: var(--night-color);
+  border-color: #1a0e07;
+  background-color: #1a0e07;
+  color: #fff;
 }
 
 main .section.cta a.button.secondary {
-  border-color: #fff;
-  color: #fff;
+  border-color: #1a0e07;
+  color: #1a0e07;
+}
+
+main .section.cta a.button.secondary:hover {
+  background-color: rgb(0 0 0 / 12%);
+  color: #1a0e07;
 }
 
 :focus-visible {
@@ -395,8 +500,15 @@ main .section.cta a.button.secondary {
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
+    animation: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+html[data-motion="off"] * {
+  transition: none !important;
+  animation: none !important;
+  scroll-behavior: auto !important;
 }
 
 /* eyebrow: an italic-only line placed directly above a heading */
@@ -418,6 +530,6 @@ main .section.center h2 {
 }
 
 ::selection {
-  background: #ddd6fe;
-  color: #17142b;
+  background: color-mix(in srgb, var(--accent-color) 45%, transparent);
+  color: var(--text-color);
 }

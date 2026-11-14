@@ -1,0 +1,26 @@
+main > .section.breadcrumb-container {
+  margin: 0;
+  padding-top: 20px;
+}
+
+.breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--dark-color);
+  font-size: var(--body-font-size-xs);
+}
+
+.breadcrumb li + li::before {
+  content: "/";
+  margin-right: 10px;
+  opacity: 0.5;
+}
+
+.breadcrumb [aria-current="page"] {
+  color: var(--text-color);
+  font-weight: 600;
+}
