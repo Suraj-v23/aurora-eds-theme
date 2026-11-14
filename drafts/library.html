@@ -3,6 +3,8 @@
 <head>
   <title>Block library: Aurora theme for AEM Edge Delivery Services</title>
   <meta name="description" content="Every block in the Aurora theme, live, with how to author it.">
+  <meta name="template" content="library">
+  <meta name="sidebar" content="/drafts/library-nav">
   <meta name="nav" content="/drafts/nav">
   <meta name="footer" content="/drafts/footer">
   <!-- local demo only: on a real site these lines come from head.html -->
@@ -23,17 +25,16 @@
     <p>Each block is a table in your document: the first row is the block name, the rows below are described under each example.</p>
   </div>
   <div>
-    <div class="sidebar"><div><div><ul><li><a href="#tabs">Tabs</a></li><li><a href="#carousel">Carousel</a></li><li><a href="#accordion">Accordion</a></li><li><a href="#modal">Modal</a></li><li><a href="#callout">Callout</a></li><li><a href="#table">Table</a></li><li><a href="#embed">Embed</a></li><li><a href="#steps">Steps</a></li><li><a href="#logos">Logos</a></li><li><a href="#stats">Stats</a></li><li><a href="#cards">Cards</a></li><li><a href="#columns">Columns</a></li><li><a href="#testimonials">Testimonials</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#breadcrumb">Breadcrumb</a></li><li><a href="#marquee">Marquee</a></li><li><a href="#timeline">Timeline</a></li><li><a href="#animated-text">Animated text</a></li><li><a href="#feature-grid">Feature grid</a></li><li><a href="#sidebar">Sidebar</a></li><li><a href="#animations">Animation styles</a></li><li><a href="#theme-customizer">Theme customizer</a></li></ul></div><div>
     <h2 id="tabs">Tabs</h2>
     <p>One row per tab. Column 1: tab label. Column 2: panel content. Arrow keys move between tabs.</p>
-    <div data-nested="tabs">
+    <div class="tabs">
       <div><div>Overview</div><div><p>Tabs keep related content in one place without a long scroll.</p></div></div>
       <div><div>Authoring</div><div><p>Add a row to add a tab. The first tab is open by default.</p></div></div>
       <div><div>Accessibility</div><div><p>Uses tablist, tab and tabpanel roles with roving focus.</p></div></div>
     </div>
     <h2 id="carousel">Carousel</h2>
     <p>One row per slide. Optional image column, then a content column. Swipe, scroll or use the arrows.</p>
-    <div data-nested="carousel">
+    <div class="carousel">
       <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Slide one</h3><p>Slides snap into place on touch devices.</p></div></div>
       <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Slide two</h3><p>Images are optional. Text-only slides work too.</p></div></div>
       <div><div><h3>Slide three</h3><p>This slide has no image.</p></div></div>
@@ -42,21 +43,21 @@
     </div>
     <h2 id="accordion">Accordion</h2>
     <p>One row per item. Column 1: question. Column 2: answer.</p>
-    <div data-nested="accordion">
+    <div class="accordion">
       <div><div>Is it keyboard accessible?</div><div><p>Yes. It uses native details and summary elements.</p></div></div>
       <div><div>Can several items be open at once?</div><div><p>Yes.</p></div></div>
     </div>
     <h2 id="modal">Modal</h2>
     <p>One row. Column 1: button label. Column 2: dialog content. Escape or a click outside closes it.</p>
-    <div data-nested="modal"><div><div>Open the dialog</div><div><h3>Hello from a modal</h3><p>Built on the native dialog element, so focus trapping and Escape come free.</p></div></div></div>
+    <div class="modal"><div><div>Open the dialog</div><div><h3>Hello from a modal</h3><p>Built on the native dialog element, so focus trapping and Escape come free.</p></div></div></div>
     <h2 id="callout">Callout</h2>
     <p>One cell of content. Variants: Callout (success), Callout (warning).</p>
-    <div data-nested="callout"><div><div><p><strong>Note.</strong> The default callout uses your brand color.</p></div></div></div>
-    <div data-nested="callout success"><div><div><p><strong>Done.</strong> Use success for confirmations.</p></div></div></div>
-    <div data-nested="callout warning"><div><div><p><strong>Careful.</strong> Use warning for things readers must not miss.</p></div></div></div>
+    <div class="callout"><div><div><p><strong>Note.</strong> The default callout uses your brand color.</p></div></div></div>
+    <div class="callout success"><div><div><p><strong>Done.</strong> Use success for confirmations.</p></div></div></div>
+    <div class="callout warning"><div><div><p><strong>Careful.</strong> Use warning for things readers must not miss.</p></div></div></div>
     <h2 id="table">Table</h2>
     <p>First row: column headings. Other rows: data. Scrolls sideways on small screens.</p>
-    <div data-nested="table">
+    <div class="table">
       <div><div>Feature</div><div>Starter</div><div>Team</div></div>
       <div><div>Sites</div><div>1</div><div>5</div></div>
       <div><div>Support</div><div>Community</div><div>Email</div></div>
@@ -64,10 +65,10 @@
     </div>
     <h2 id="embed">Embed</h2>
     <p>One cell with a YouTube or Vimeo link. Nothing loads from the video site until the visitor presses play.</p>
-    <div data-nested="embed"><div><div><a href="https://www.youtube.com/watch?v=VIDEO_ID">Replace this link with your video</a></div></div></div>
+    <div class="embed"><div><div><a href="https://www.youtube.com/watch?v=VIDEO_ID">Replace this link with your video</a></div></div></div>
     <h2 id="steps">Steps</h2>
     <p>One row per step. Column 1: title. Column 2: description. Numbers are automatic.</p>
-    <div data-nested="steps">
+    <div class="steps">
       <div><div>Plan</div><div>Describe the first step.</div></div>
       <div><div>Build</div><div>Describe the second step.</div></div>
       <div><div>Launch</div><div>Describe the third step.</div></div>
@@ -75,65 +76,64 @@
     </div>
     <h2 id="logos">Logos</h2>
     <p>One cell per logo: an image or a company name.</p>
-    <div data-nested="logos"><div><div>Northwind</div><div>Contoso</div><div>Fabrikam</div><div>Globex</div><div>Initech</div></div></div>
+    <div class="logos"><div><div>Northwind</div><div>Contoso</div><div>Fabrikam</div><div>Globex</div><div>Initech</div></div></div>
     <h2 id="stats">Stats</h2>
     <p>One row per stat. Column 1: number. Column 2: label. Numbers count up on scroll.</p>
-    <div data-nested="stats">
+    <div class="stats">
       <div><div>250+</div><div>Customers</div></div>
       <div><div>99%</div><div>Uptime</div></div>
       <div><div>12</div><div>Countries</div></div>
     </div>
     <h2 id="cards">Cards</h2>
     <p>One row per card. Optional image column, then heading and text.</p>
-    <div data-nested="cards">
+    <div class="cards">
       <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>With image</h3><p>Images are cropped to 16:9.</p></div></div>
       <div><div><h3>Text only</h3><p>Leave the image column out.</p></div></div>
       <div><div><h3>Hover</h3><p>Cards lift slightly on hover.</p></div></div>
     </div>
     <h2 id="columns">Columns</h2>
     <p>One row per feature: an image cell and a text cell. Rows alternate sides on desktop.</p>
-    <div data-nested="columns">
+    <div class="columns">
       <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Image left</h3><p>The first row puts the image on the left.</p></div></div>
       <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Image right</h3><p>The second row flips automatically.</p></div></div>
     </div>
     <h2 id="testimonials">Testimonials</h2>
     <p>One row per quote. Column 1: quote. Column 2: name and role.</p>
-    <div data-nested="testimonials">
+    <div class="testimonials">
       <div><div><p>"Short, specific quotes work best."</p></div><div><p><strong>Customer name</strong></p><p>Role, Company</p></div></div>
       <div><div><p>"Every block adapts inside a dark section."</p></div><div><p><strong>Customer name</strong></p><p>Role, Company</p></div></div>
     </div>
     <h2 id="pricing">Pricing</h2>
     <p>One row per plan: name, price, feature list, button. Optional second column: badge text that highlights the plan.</p>
-    <div data-nested="pricing">
+    <div class="pricing">
       <div><div><h3>Basic</h3><p>$9</p><ul><li>Feature one</li><li>Feature two</li></ul><p><em><a href="#">Choose</a></em></p></div><div></div></div>
       <div><div><h3>Pro</h3><p>$29</p><ul><li>Everything in Basic</li><li>Feature three</li></ul><p><strong><a href="#">Choose</a></strong></p></div><div>Best value</div></div>
     </div>
     <h2 id="breadcrumb">Breadcrumb</h2>
     <p>Empty block: builds Home / segments from the URL. Or list links, one per cell; the last cell is the current page. Set page metadata breadcrumb = on to add it automatically.</p>
-    <div data-nested="breadcrumb"><div><div><a href="/">Home</a></div><div><a href="/library">Block library</a></div><div>Breadcrumb</div></div></div>
+    <div class="breadcrumb"><div><div><a href="/">Home</a></div><div><a href="/library">Block library</a></div><div>Breadcrumb</div></div></div>
     <h2 id="marquee">Marquee</h2>
     <p>One cell per item (text or logo). Loops forever, pauses on hover, static for reduced motion. Variant: Marquee (reverse).</p>
-    <div data-nested="marquee"><div><div>Northwind</div><div>Contoso</div><div>Fabrikam</div><div>Globex</div><div>Initech</div><div>Umbrella</div></div></div>
-    <div data-nested="marquee reverse"><div><div>Reverse</div><div>direction</div><div>for</div><div>a</div><div>second</div><div>row</div></div></div>
+    <div class="marquee"><div><div>Northwind</div><div>Contoso</div><div>Fabrikam</div><div>Globex</div><div>Initech</div><div>Umbrella</div></div></div>
+    <div class="marquee reverse"><div><div>Reverse</div><div>direction</div><div>for</div><div>a</div><div>second</div><div>row</div></div></div>
     <h2 id="timeline">Timeline</h2>
     <p>One row per event. Column 1: date. Column 2: heading and text. Alternates sides on desktop.</p>
-    <div data-nested="timeline"><div><div>2024</div><div><h3>Started</h3><p>The first commit.</p></div></div><div><div>2025</div><div><h3>Grew</h3><p>More blocks and themes.</p></div></div><div><div>2026</div><div><h3>Shipped</h3><p>Used on real sites.</p></div></div></div>
+    <div class="timeline"><div><div>2024</div><div><h3>Started</h3><p>The first commit.</p></div></div><div><div>2025</div><div><h3>Grew</h3><p>More blocks and themes.</p></div></div><div><div>2026</div><div><h3>Shipped</h3><p>Used on real sites.</p></div></div></div>
     <h2 id="animated-text">Animated text</h2>
     <p>Row 1: text before. Row 2: a list of words, cycled every 2.5 seconds. Screen readers get every word; reduced motion shows the first.</p>
-    <div data-nested="animated-text"><div><div>We build</div></div><div><div><ul><li>fast sites</li><li>bold sites</li><li>accessible sites</li></ul></div></div></div>
+    <div class="animated-text"><div><div>We build</div></div><div><div><ul><li>fast sites</li><li>bold sites</li><li>accessible sites</li></ul></div></div></div>
     <h2 id="feature-grid">Feature grid</h2>
     <p>One row per tile: optional icon line (a symbol or :icon:), heading, text. First tile is larger. Variants: Feature Grid (wide), Feature Grid (uniform).</p>
-    <div data-nested="feature-grid"><div><div><p>✦</p><h3>Large first tile</h3><p>It spans two columns and two rows on desktop.</p></div></div><div><div><p>⚡</p><h3>Fast</h3><p>Hover for the glow.</p></div></div><div><div><p>◐</p><h3>Themed</h3><p>Follows the active preset.</p></div></div><div><div><p>♿</p><h3>Accessible</h3><p>Plain semantic markup.</p></div></div></div>
+    <div class="feature-grid"><div><div><p>✦</p><h3>Large first tile</h3><p>It spans two columns and two rows on desktop.</p></div></div><div><div><p>⚡</p><h3>Fast</h3><p>Hover for the glow.</p></div></div><div><div><p>◐</p><h3>Themed</h3><p>Follows the active preset.</p></div></div><div><div><p>♿</p><h3>Accessible</h3><p>Plain semantic markup.</p></div></div></div>
     <h2 id="sidebar">Sidebar</h2>
-    <p>One row, two cells. Cell 1: a list of #links to headings (sticky, highlights the current one). Cell 2: content. This page is built with it; hand-written HTML in cell 2 can nest blocks with data-nested.</p>
+    <p>One row, two cells. Cell 1: a list of #links to headings (sticky, highlights the current one). Cell 2: content. Hand-written HTML in cell 2 can nest blocks with data-nested.</p>
     <p>The navigation on the left is this block. On mobile it collapses behind a Menu button. Variants: Sidebar (docs) caps the content at a readable width, Sidebar (toc) adds an "On this page" outline built from h2 and h3. In the nav, a bold-only paragraph or heading followed by a list becomes a group. For a whole page, see the <a href="/docs">docs template</a>.</p>
-    <h2 id="animations">Animation styles</h2>
+    <h2 id="animation-styles">Animation styles</h2>
     <p>Section Metadata Style: fade-up (default), zoom, slide-left, slide-right, stagger (items of every block in the section appear in sequence). Disabled for reduced motion and when visitors switch animations off.</p>
     <p>Scroll down to the bottom of this page to see slide and zoom sections.</p>
     <h2 id="theme-customizer">Theme customizer</h2>
     <p>Use the Customize button at the bottom right: theme cards (including Docs and Docs dark), accent swatches, text style and an animation switch. Disable it per page with metadata theme-panel = off.</p>
     <p>Choices are remembered in the visitor's browser.</p>
-    </div></div></div>
   </div>
   <div class="zoom center">
     <h2>Zoom section</h2>

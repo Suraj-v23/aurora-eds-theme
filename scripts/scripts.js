@@ -62,8 +62,10 @@ function buildAutoBlocks(main) {
       main.prepend(section);
     }
     // docs template: nav fragment (metadata `sidebar`) + content + "on this page" TOC
-    if (getMetadata('template') === 'docs' && getMetadata('sidebar') && !main.querySelector('.sidebar')) {
+    const tpl = getMetadata('template');
+    if (['docs', 'library'].includes(tpl) && getMetadata('sidebar') && !main.querySelector('.sidebar')) {
       main.classList.add('docs-layout');
+      if (tpl === 'library') main.classList.add('docs-wide');
       // eslint-disable-next-line import/no-cycle
       import('../blocks/sidebar/sidebar.js').then(({ docsLayout }) => docsLayout(main, getMetadata('sidebar')));
     }
@@ -166,7 +168,7 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
-    if (getMetadata('template') === 'docs') await loadCSS(`${window.hlx.codeBasePath}/blocks/sidebar/sidebar.css`);
+    if (['docs', 'library'].includes(getMetadata('template'))) await loadCSS(`${window.hlx.codeBasePath}/blocks/sidebar/sidebar.css`);
     decorateMain(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);

@@ -75,7 +75,7 @@ export async function docsLayout(main, path) {
     aside.append(nav);
     main.prepend(aside);
     enhanceNav(nav);
-    const toc = buildToc(main);
+    const toc = !main.classList.contains('docs-wide') && buildToc(main);
     if (toc) {
       const right = document.createElement('aside');
       right.className = 'docs-aside docs-aside-toc';
