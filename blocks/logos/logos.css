@@ -1,0 +1,34 @@
+.logos ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px 48px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logos li {
+  color: var(--dark-color);
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-m);
+  font-weight: 600;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.logos li:hover {
+  opacity: 1;
+}
+
+.logos p {
+  margin: 0;
+}
+
+.logos img {
+  display: block;
+  width: auto;
+  height: 32px;
+  filter: grayscale(1);
+}

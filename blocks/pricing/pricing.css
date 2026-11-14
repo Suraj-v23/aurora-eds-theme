@@ -59,7 +59,7 @@
 .pricing li {
   padding: 6px 0 6px 28px;
   background: no-repeat left 0.6em / 16px
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="%2306b6d4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m2 8.5 4 4 8-9"/></svg>');
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill="none" stroke="%239333ea" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" d="m2 8.5 4 4 8-9"/></svg>');
 }
 
 .pricing p.button-wrapper {

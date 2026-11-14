@@ -1,1 +1,12 @@
 /* add global styles that can be loaded post LCP here */
+
+main > .section.reveal > div {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+main > .section.reveal.in-view > div {
+  opacity: 1;
+  transform: none;
+}

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Block library: Aurora theme for AEM Edge Delivery Services</title>
+  <meta name="description" content="Every block in the Aurora theme, live, with how to author it.">
+  <meta name="nav" content="/drafts/nav">
+  <meta name="footer" content="/drafts/footer">
+  <!-- local demo only: on a real site these lines come from head.html -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/scripts/aem.js" type="module"></script>
+  <script src="/scripts/scripts.js" type="module"></script>
+  <link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <div class="center">
+    <p><em>Block library</em></p>
+    <h1>Every block, live</h1>
+    <p>Each block is a table in your document: the first row is the block name, the rows below are described under each example.</p>
+  </div>
+  <div class="narrow">
+    <h2>Tabs</h2>
+    <p>One row per tab. Column 1: tab label. Column 2: panel content. Arrow keys move between tabs.</p>
+    <div class="tabs">
+      <div><div>Overview</div><div><p>Tabs keep related content in one place without a long scroll.</p></div></div>
+      <div><div>Authoring</div><div><p>Add a row to add a tab. The first tab is open by default.</p></div></div>
+      <div><div>Accessibility</div><div><p>Uses tablist, tab and tabpanel roles with roving focus.</p></div></div>
+    </div>
+  </div>
+  <div class="light">
+    <h2>Carousel</h2>
+    <p>One row per slide. Optional image column, then a content column. Swipe, scroll or use the arrows.</p>
+    <div class="carousel">
+      <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Slide one</h3><p>Slides snap into place on touch devices.</p></div></div>
+      <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Slide two</h3><p>Images are optional. Text-only slides work too.</p></div></div>
+      <div><div><h3>Slide three</h3><p>This slide has no image.</p></div></div>
+      <div><div><h3>Slide four</h3><p>Add as many rows as you need.</p></div></div>
+      <div><div><h3>Slide five</h3><p>No autoplay: visitors stay in control.</p></div></div>
+    </div>
+  </div>
+  <div class="narrow">
+    <h2>Accordion</h2>
+    <p>One row per item. Column 1: question. Column 2: answer.</p>
+    <div class="accordion">
+      <div><div>Is it keyboard accessible?</div><div><p>Yes. It uses native details and summary elements.</p></div></div>
+      <div><div>Can several items be open at once?</div><div><p>Yes.</p></div></div>
+    </div>
+  </div>
+  <div class="narrow">
+    <h2>Modal</h2>
+    <p>One row. Column 1: button label. Column 2: dialog content. Escape or a click outside closes it.</p>
+    <div class="modal"><div><div>Open the dialog</div><div><h3>Hello from a modal</h3><p>Built on the native dialog element, so focus trapping and Escape come free.</p></div></div></div>
+  </div>
+  <div class="narrow">
+    <h2>Callout</h2>
+    <p>One cell of content. Variants: Callout (success), Callout (warning).</p>
+    <div class="callout"><div><div><p><strong>Note.</strong> The default callout uses your brand color.</p></div></div></div>
+    <div class="callout success"><div><div><p><strong>Done.</strong> Use success for confirmations.</p></div></div></div>
+    <div class="callout warning"><div><div><p><strong>Careful.</strong> Use warning for things readers must not miss.</p></div></div></div>
+  </div>
+  <div class="narrow">
+    <h2>Table</h2>
+    <p>First row: column headings. Other rows: data. Scrolls sideways on small screens.</p>
+    <div class="table">
+      <div><div>Feature</div><div>Starter</div><div>Team</div></div>
+      <div><div>Sites</div><div>1</div><div>5</div></div>
+      <div><div>Support</div><div>Community</div><div>Email</div></div>
+      <div><div>Priority updates</div><div>No</div><div>Yes</div></div>
+    </div>
+  </div>
+  <div class="narrow">
+    <h2>Embed</h2>
+    <p>One cell with a YouTube or Vimeo link. Nothing loads from the video site until the visitor presses play.</p>
+    <div class="embed"><div><div><a href="https://www.youtube.com/watch?v=VIDEO_ID">Replace this link with your video</a></div></div></div>
+  </div>
+  <div class="center">
+    <h2>Steps</h2>
+    <p>One row per step. Column 1: title. Column 2: description. Numbers are automatic.</p>
+    <div class="steps">
+      <div><div>Plan</div><div>Describe the first step.</div></div>
+      <div><div>Build</div><div>Describe the second step.</div></div>
+      <div><div>Launch</div><div>Describe the third step.</div></div>
+      <div><div>Measure</div><div>Add or remove rows freely.</div></div>
+    </div>
+  </div>
+  <div class="center">
+    <h2>Logos</h2>
+    <p>One cell per logo: an image or a company name.</p>
+    <div class="logos"><div><div>Northwind</div><div>Contoso</div><div>Fabrikam</div><div>Globex</div><div>Initech</div></div></div>
+  </div>
+  <div class="center">
+    <h2>Stats</h2>
+    <p>One row per stat. Column 1: number. Column 2: label. Numbers count up on scroll.</p>
+    <div class="stats">
+      <div><div>250+</div><div>Customers</div></div>
+      <div><div>99%</div><div>Uptime</div></div>
+      <div><div>12</div><div>Countries</div></div>
+    </div>
+  </div>
+  <div class="center">
+    <h2>Cards</h2>
+    <p>One row per card. Optional image column, then heading and text.</p>
+    <div class="cards">
+      <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>With image</h3><p>Images are cropped to 16:9.</p></div></div>
+      <div><div><h3>Text only</h3><p>Leave the image column out.</p></div></div>
+      <div><div><h3>Hover</h3><p>Cards lift slightly on hover.</p></div></div>
+    </div>
+  </div>
+  <div>
+    <h2>Columns</h2>
+    <p>One row per feature: an image cell and a text cell. Rows alternate sides on desktop.</p>
+    <div class="columns">
+      <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Image left</h3><p>The first row puts the image on the left.</p></div></div>
+      <div><div><picture><img src="/drafts/media/app.svg" alt="" width="640" height="420" loading="lazy"></picture></div><div><h3>Image right</h3><p>The second row flips automatically.</p></div></div>
+    </div>
+  </div>
+  <div class="dark center">
+    <h2>Testimonials</h2>
+    <p>One row per quote. Column 1: quote. Column 2: name and role. Shown here in a dark section.</p>
+    <div class="testimonials">
+      <div><div><p>"Short, specific quotes work best."</p></div><div><p><strong>Customer name</strong></p><p>Role, Company</p></div></div>
+      <div><div><p>"Every block adapts inside a dark section."</p></div><div><p><strong>Customer name</strong></p><p>Role, Company</p></div></div>
+    </div>
+  </div>
+  <div class="center">
+    <h2>Pricing</h2>
+    <p>One row per plan: name, price, feature list, button. Optional second column: badge text that highlights the plan.</p>
+    <div class="pricing">
+      <div><div><h3>Basic</h3><p>$9</p><ul><li>Feature one</li><li>Feature two</li></ul><p><em><a href="#">Choose</a></em></p></div><div></div></div>
+      <div><div><h3>Pro</h3><p>$29</p><ul><li>Everything in Basic</li><li>Feature three</li></ul><p><strong><a href="#">Choose</a></strong></p></div><div>Best value</div></div>
+    </div>
+  </div>
+  <div class="cta">
+    <h2>Buttons and section styles</h2>
+    <p>Bold link: primary button. Italic link: secondary button. This band uses the "cta" section style.</p>
+    <p><strong><a href="/">Primary</a></strong></p>
+    <p><em><a href="/">Secondary</a></em></p>
+  </div>
+</main>
+<footer></footer>
+</body>
+</html>

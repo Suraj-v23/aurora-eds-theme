@@ -6,8 +6,10 @@ A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services
 
 - No build step, no web fonts, no dependencies at runtime
 - Rebrand the whole site from one block of CSS variables
-- 10 blocks and 5 section styles, each authored as a plain table
-- Dark sections, visible focus rings, reduced-motion support
+- 18 blocks and 5 section styles, each authored as a plain table
+- Interactive components (tabs, carousel, accordion, modal, embed) in plain JavaScript
+- A live block library page that documents every block
+- Dark sections, scroll reveal, visible focus rings, reduced-motion support
 
 ## Quick start
 
@@ -30,26 +32,46 @@ Edit the variables at the top of [`styles/styles.css`](styles/styles.css):
 | Variable | Controls |
 |---|---|
 | `--link-color`, `--link-hover-color` | Brand color: buttons, links, highlights |
-| `--accent-color` | Second gradient color, check marks, focus ring |
+| `--accent-color` | Check marks, focus ring |
+| `--gradient` | Stat numbers, step numbers, badges, call-to-action band |
 | `--night-color` | Hero and dark section background |
 | `--radius`, `--shadow` | Card shape and depth |
 | `--body-font-family`, `--heading-font-family` | Fonts (system stack by default) |
 
 ## Blocks
 
-Each block is a table in your document. The first row is the block name.
+Each block is a table in your document. The first row is the block name. See every block live, with authoring notes, on the **block library page**: run `npm run dev` and open http://localhost:3000/library ([source](drafts/library.html)).
+
+**Layout and content**
 
 | Block | Rows | Columns |
 |---|---|---|
-| **Hero** | One row | Heading, text, buttons. Optional image becomes the background. |
+| **Hero** | One row | Heading, text, buttons. Italic words in the heading get the gradient. An italic line above the heading becomes a pill label. Optional image becomes the background. |
 | **Cards** | One per card | Optional image column, then heading and text |
-| **Stats** | One per stat | Number, label |
+| **Columns** | One per feature | Image cell and text cell. Rows alternate sides on desktop. |
+| **Stats** | One per stat | Number, label. Numbers count up on scroll. |
+| **Steps** | One per step | Title, description. Numbered automatically. |
+| **Logos** | Any | One logo image or company name per cell |
 | **Testimonials** | One per quote | Quote, then name and role |
 | **Pricing** | One per plan | Plan name (H3), price, feature list, button. Optional second column with badge text such as "Most popular" highlights the plan. |
+| **Table** | First row is the heading row | One cell per column |
+| **Callout** | One | Content. Variants: `Callout (success)`, `Callout (warning)` |
+
+**Interactive components** (plain JavaScript, loaded only on pages that use them)
+
+| Block | Rows | Columns |
+|---|---|---|
+| **Tabs** | One per tab | Tab label, panel content. Arrow-key navigation. |
 | **Accordion** | One per item | Question, answer |
-| **Columns**, **Fragment**, **Header**, **Footer** | As in the boilerplate | |
+| **Carousel** | One per slide | Optional image column, then content. Scroll-snap, arrow buttons, no autoplay. |
+| **Modal** | One | Button label, dialog content. Native `<dialog>`. |
+| **Embed** | One | YouTube or Vimeo link. Loads the player only after the visitor presses play. |
+
+**From the boilerplate:** Fragment, Header, Footer.
 
 Buttons: make a link **bold** for a primary button, *italic* for a secondary button.
+
+Eyebrow labels: an italic-only line directly above any heading becomes a small uppercase label.
 
 ## Section styles
 

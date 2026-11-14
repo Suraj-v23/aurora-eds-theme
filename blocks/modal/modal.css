@@ -1,0 +1,42 @@
+.modal .modal-dialog {
+  width: min(560px, calc(100% - 32px));
+  border: 0;
+  border-radius: var(--radius);
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  box-shadow: 0 30px 80px rgb(0 0 0 / 35%);
+  text-align: left;
+}
+
+.modal .modal-dialog::backdrop {
+  background: rgb(20 18 42 / 60%);
+  backdrop-filter: blur(4px);
+}
+
+.modal .modal-content {
+  padding: 32px;
+}
+
+.modal .modal-content > :first-child {
+  margin-top: 0;
+}
+
+.modal .modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--light-color);
+  color: var(--text-color);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.modal .modal-close::before {
+  content: "×";
+}

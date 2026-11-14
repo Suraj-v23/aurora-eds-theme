@@ -122,6 +122,12 @@ function decorateButtons(main) {
  */
 // eslint-disable-next-line import/prefer-default-export
 export function decorateMain(main) {
+  // eyebrow: a paragraph that is only italic text, directly above a heading
+  main.querySelectorAll('p > em:only-child').forEach((em) => {
+    const p = em.parentElement;
+    if (p.textContent.trim() === em.textContent.trim() && !em.querySelector('a')
+      && /^H[1-6]$/.test(p.nextElementSibling?.tagName || '')) p.classList.add('eyebrow');
+  });
   decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
@@ -157,6 +163,28 @@ async function loadEager(doc) {
  * Loads everything that doesn't need to be delayed.
  * @param {Element} doc The container element
  */
+/**
+ * Fades sections in as they scroll into view. Skips the first section (LCP)
+ * and does nothing when the visitor prefers reduced motion.
+ * @param {Element} main The main element
+ */
+function revealOnScroll(main) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in-view');
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: 0.1 });
+  main.querySelectorAll(':scope > .section:not(:first-of-type)').forEach((section) => {
+    // only sections still below the fold animate; anything already visible stays put
+    if (section.getBoundingClientRect().top < window.innerHeight) return;
+    section.classList.add('reveal');
+    observer.observe(section);
+  });
+}
+
 async function loadLazy(doc) {
   loadHeader(doc.querySelector('body > header'));
 
@@ -170,6 +198,7 @@ async function loadLazy(doc) {
   loadFooter(doc.querySelector('body > footer'));
 
   loadCSS(`${window.hlx.codeBasePath}/styles/lazy-styles.css`);
+  revealOnScroll(main);
   loadFonts();
 }
 
