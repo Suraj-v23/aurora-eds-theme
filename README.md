@@ -2,9 +2,11 @@
 
 A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services](https://www.aem.live/). Built on the official [Adobe AEM boilerplate](https://github.com/adobe/aem-boilerplate), so the standard tooling, Sidekick and upgrade path keep working.
 
+![Aurora theme preview](docs/screenshot.png)
+
 - No build step, no web fonts, no dependencies at runtime
 - Rebrand the whole site from one block of CSS variables
-- 9 blocks and 6 section styles, each authored as a plain table
+- 10 blocks and 5 section styles, each authored as a plain table
 - Dark sections, visible focus rings, reduced-motion support
 
 ## Quick start
@@ -19,7 +21,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. The demo content lives in [`drafts/`](drafts/).
+Open http://localhost:3000. The demo content lives in [`drafts/`](drafts/). In the local demo, section styles are written as classes on the section `<div>`; on a real site authors use the Section Metadata table and the delivery service adds those classes.
 
 ## Rebrand
 
