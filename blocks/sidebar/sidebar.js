@@ -18,6 +18,37 @@ function spy(links) {
   targets.forEach((_, el) => observer.observe(el));
 }
 
+/** Filter box: hides links that don't match, Enter opens the first match, "/" focuses it. */
+function addSearch(nav) {
+  const wrap = document.createElement('div');
+  wrap.className = 'docs-search';
+  wrap.innerHTML = '<input type="search" placeholder="Search" aria-label="Search the menu" autocomplete="off"><kbd aria-hidden="true">/</kbd><p class="docs-empty" hidden>No matches</p>';
+  const input = wrap.querySelector('input');
+  const empty = wrap.querySelector('.docs-empty');
+  const items = [...nav.querySelectorAll('li')];
+  const filter = () => {
+    const q = input.value.trim().toLowerCase();
+    items.forEach((li) => { li.hidden = !!q && !li.textContent.toLowerCase().includes(q); });
+    nav.querySelectorAll('.docs-label').forEach((label) => {
+      const list = label.nextElementSibling;
+      label.hidden = !!q && !!list && !list.querySelector('li:not([hidden])');
+    });
+    empty.hidden = !q || !!nav.querySelector('li:not([hidden]) a');
+  };
+  input.addEventListener('input', filter);
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') nav.querySelector('li:not([hidden]) a')?.click();
+    if (e.key === 'Escape') { input.value = ''; filter(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
+      e.preventDefault();
+      input.focus();
+    }
+  });
+  nav.prepend(wrap);
+}
+
 /** Groups (heading or bold-only paragraph + list), current page, spy and mobile menu toggle. */
 export function enhanceNav(nav) {
   nav.classList.add('docs-nav');
@@ -29,6 +60,7 @@ export function enhanceNav(nav) {
     if (!a.hash && trim(a.pathname) === trim(window.location.pathname)) a.setAttribute('aria-current', 'page');
   });
   spy([...nav.querySelectorAll('a[href*="#"]')]);
+  addSearch(nav);
   const toggle = document.createElement('button');
   toggle.type = 'button';
   toggle.className = 'docs-menu-toggle';
