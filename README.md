@@ -2,6 +2,8 @@
 
 A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services](https://www.aem.live/). Built on the official [Adobe AEM boilerplate](https://github.com/adobe/aem-boilerplate), so the standard tooling, Sidekick and upgrade path keep working.
 
+**Live demo:** https://suraj-v23.github.io/aurora-eds-theme/ · **Block library:** https://suraj-v23.github.io/aurora-eds-theme/library/
+
 ![Aurora theme preview](docs/screenshot.png)
 
 - No build step, no web fonts, no dependencies at runtime
@@ -90,6 +92,10 @@ Add a **Section Metadata** table with a `Style` row. Combine with commas, for ex
 ```sh
 npm run lint
 ```
+
+## Demo site
+
+The live demo is a static copy of `drafts/`, built by `tools/build-demo.sh` and deployed to GitHub Pages on every push to `main`. It shows the theme; a real project is served by AEM Edge Delivery from your own content source.
 
 ## License
 
