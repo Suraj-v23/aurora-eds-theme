@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Documentation: Aurora theme</title>
+  <meta name="description" content="Documentation-style page using the Aurora docs template: side navigation, readable column and an on-page table of contents.">
+  <meta name="template" content="docs">
+  <meta name="theme" content="docs">
+  <meta name="sidebar" content="/drafts/docs-nav">
+  <meta name="nav" content="/drafts/nav">
+  <meta name="footer" content="/drafts/footer">
+  <!-- local demo only: on a real site these lines come from head.html -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/scripts/aem.js" type="module"></script>
+  <script src="/scripts/scripts.js" type="module"></script>
+  <link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <div>
+    <h1 id="introduction">Introduction</h1>
+    <p>Aurora ships a calm documentation layout: a navigation column on the left, a readable content column and an "On this page" outline on the right. It is switched on with page metadata only, so authors never touch code.</p>
+    <div class="callout"><div><div><p><strong>Tip.</strong> Use the Customize button to switch between the light and dark docs presets.</p></div></div></div>
+    <h2 id="installation">Installation</h2>
+    <p>Copy the theme into your repository and keep the boilerplate tooling. There is no build step.</p>
+    <pre><code>git clone https://github.com/Suraj-v23/aurora-eds-theme
+cd aurora-eds-theme
+npm install
+npm run dev</code></pre>
+    <h2 id="project-structure">Project structure</h2>
+    <p>Each block lives in its own folder with one JavaScript and one CSS file. Global tokens live at the top of <code>styles/styles.css</code>.</p>
+    <h3 id="page-metadata">Page metadata</h3>
+    <p>Three metadata rows turn any page into a docs page.</p>
+  </div>
+  <div>
+    <div class="table"><div><div>Name</div><div>Value</div><div>Purpose</div></div><div><div>template</div><div>docs</div><div>Enables the docs layout</div></div><div><div>sidebar</div><div>/drafts/docs-nav</div><div>Fragment with the navigation</div></div><div><div>theme</div><div>docs</div><div>Default preset when the visitor has no saved choice</div></div></div>
+  </div>
+  <div>
+    <h2 id="presets">Presets</h2>
+    <p>A preset only overrides CSS variables, so every block follows it automatically.</p>
+    <h3 id="docs-preset">Docs preset</h3>
+    <p>White background, soft grey surfaces, small radii, flat bordered cards and a quiet periwinkle accent.</p>
+    <h3 id="dark-variant">Dark variant</h3>
+    <p>The <code>docs-dark</code> preset keeps the same structure on a near-black background.</p>
+    <h2 id="fonts">Fonts</h2>
+    <p>The docs preset uses a clean system sans-serif for headings. Pick another style in the customizer if you prefer.</p>
+    <h2 id="customizer">Customizer</h2>
+    <p>Visitors can change theme, accent colour, text style and motion. Everything is stored in their browser. Add metadata <code>theme-panel</code> = <code>off</code> to hide it.</p>
+  </div>
+</main>
+<footer></footer>
+</body>
+</html>

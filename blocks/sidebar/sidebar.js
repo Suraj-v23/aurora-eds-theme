@@ -1,22 +1,9 @@
 import { decorateBlock, loadBlock } from '../../scripts/aem.js';
 
-/* Sidebar: cell 1 = #links (sticky nav), cell 2 = content.
-   Raw HTML in cell 2 can nest blocks via data-nested="name". */
-export default function decorate(block) {
-  const [navCell, content] = block.firstElementChild?.children || [];
-  if (!navCell || !content) return;
-  const nav = document.createElement('nav');
-  nav.setAttribute('aria-label', 'On this page');
-  nav.append(...navCell.childNodes);
-  content.className = 'sidebar-content';
-  block.replaceChildren(nav, content);
-  content.querySelectorAll('[data-nested]').forEach((el) => {
-    el.className = el.dataset.nested;
-    decorateBlock(el);
-    loadBlock(el);
-  });
+const trim = (p) => p.replace(/\/(index(\.html)?)?$/, '') || '/';
 
-  const links = [...nav.querySelectorAll('a[href*="#"]')];
+/** Scroll spy: marks the link whose heading is currently near the top. */
+function spy(links) {
   const targets = new Map();
   links.forEach((a) => {
     const el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
@@ -29,4 +16,95 @@ export default function decorate(block) {
     });
   }, { rootMargin: '0px 0px -75% 0px' });
   targets.forEach((_, el) => observer.observe(el));
+}
+
+/** Groups (heading or bold-only paragraph + list), current page, spy and mobile menu toggle. */
+export function enhanceNav(nav) {
+  nav.classList.add('docs-nav');
+  [...nav.children].forEach((el) => {
+    const strong = el.tagName === 'P' && el.children.length === 1 && el.firstElementChild.tagName === 'STRONG';
+    if (/^H[1-6]$/.test(el.tagName) || (strong && !el.querySelector('a'))) el.classList.add('docs-label');
+  });
+  nav.querySelectorAll('a[href]').forEach((a) => {
+    if (!a.hash && trim(a.pathname) === trim(window.location.pathname)) a.setAttribute('aria-current', 'page');
+  });
+  spy([...nav.querySelectorAll('a[href*="#"]')]);
+  const toggle = document.createElement('button');
+  toggle.type = 'button';
+  toggle.className = 'docs-menu-toggle';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.textContent = 'Menu';
+  toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', toggle.getAttribute('aria-expanded') !== 'true'));
+  nav.before(toggle);
+}
+
+/** "On this page" mini table of contents from h2/h3 of the content. */
+export function buildToc(root) {
+  const heads = [...root.querySelectorAll('.default-content-wrapper :is(h2, h3), :scope > :is(h2, h3)')];
+  if (heads.length < 2) return null;
+  const nav = document.createElement('nav');
+  nav.className = 'docs-toc';
+  nav.setAttribute('aria-label', 'On this page');
+  nav.innerHTML = '<p>On this page</p><ul></ul>';
+  heads.forEach((h) => {
+    if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const li = document.createElement('li');
+    li.className = h.tagName.toLowerCase();
+    const a = document.createElement('a');
+    a.href = `#${h.id}`;
+    a.textContent = h.textContent;
+    li.append(a);
+    nav.lastElementChild.append(li);
+  });
+  spy([...nav.querySelectorAll('a')]);
+  return nav;
+}
+
+/** Page-level docs layout: nav fragment on the left, content, TOC on the right. */
+export async function docsLayout(main, path) {
+  try {
+    // eslint-disable-next-line import/no-cycle
+    const { loadFragment } = await import('../fragment/fragment.js');
+    const frag = await loadFragment(path);
+    if (!frag) throw new Error('no nav');
+    const nav = document.createElement('nav');
+    nav.setAttribute('aria-label', 'Documentation');
+    nav.append(...frag.querySelectorAll('.default-content-wrapper > *'));
+    const aside = document.createElement('aside');
+    aside.className = 'docs-aside';
+    aside.append(nav);
+    main.prepend(aside);
+    enhanceNav(nav);
+    const toc = buildToc(main);
+    if (toc) {
+      const right = document.createElement('aside');
+      right.className = 'docs-aside docs-aside-toc';
+      right.append(toc);
+      main.append(right);
+    }
+  } catch (e) {
+    main.classList.remove('docs-layout');
+  }
+}
+
+/* Sidebar: cell 1 = #links (sticky nav), cell 2 = content. Variants: docs, toc.
+   Raw HTML in cell 2 can nest blocks via data-nested="name". */
+export default function decorate(block) {
+  const [navCell, content] = block.firstElementChild?.children || [];
+  if (!navCell || !content) return;
+  const nav = document.createElement('nav');
+  nav.setAttribute('aria-label', 'Navigation');
+  nav.append(...navCell.childNodes);
+  content.className = 'sidebar-content';
+  block.replaceChildren(nav, content);
+  content.querySelectorAll('[data-nested]').forEach((el) => {
+    el.className = el.dataset.nested;
+    decorateBlock(el);
+    loadBlock(el);
+  });
+  enhanceNav(nav);
+  if (block.classList.contains('toc')) {
+    const toc = buildToc(content);
+    if (toc) block.append(toc);
+  }
 }

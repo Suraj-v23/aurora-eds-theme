@@ -1,6 +1,7 @@
 footer {
-  background-color: var(--night-color);
-  color: #b5ab9f;
+  background-color: var(--footer-bg, var(--night-color));
+  color: var(--footer-text, #b5ab9f);
+  border-top: var(--footer-border, 0);
   font-size: var(--body-font-size-xs);
 }
 
@@ -15,7 +16,7 @@ footer .footer p {
 }
 
 footer .footer a:any-link {
-  color: #f3ede6;
+  color: var(--footer-link, #f3ede6);
 }
 
 @media (width >= 900px) {

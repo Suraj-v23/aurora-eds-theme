@@ -61,6 +61,12 @@ function buildAutoBlocks(main) {
       section.append(buildBlock('breadcrumb', ''));
       main.prepend(section);
     }
+    // docs template: nav fragment (metadata `sidebar`) + content + "on this page" TOC
+    if (getMetadata('template') === 'docs' && getMetadata('sidebar') && !main.querySelector('.sidebar')) {
+      main.classList.add('docs-layout');
+      // eslint-disable-next-line import/no-cycle
+      import('../blocks/sidebar/sidebar.js').then(({ docsLayout }) => docsLayout(main, getMetadata('sidebar')));
+    }
     // auto load `*/fragments/*` references
     const fragments = [...main.querySelectorAll('a[href*="/fragments/"]')].filter((f) => !f.closest('.fragment'));
     if (fragments.length > 0) {
@@ -149,8 +155,9 @@ export function decorateMain(main) {
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
   try { // apply saved theme choices before first paint
-    const saved = JSON.parse(localStorage.getItem('aurora-theme'));
     const root = document.documentElement;
+    if (getMetadata('theme')) root.dataset.theme = getMetadata('theme'); // page default
+    const saved = JSON.parse(localStorage.getItem('aurora-theme'));
     ['theme', 'font', 'motion'].forEach((k) => { if (saved[k]) root.dataset[k] = saved[k]; });
     Object.entries(saved.vars || {}).forEach(([k, v]) => root.style.setProperty(k, v));
   } catch (e) {
@@ -159,6 +166,7 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
+    if (getMetadata('template') === 'docs') await loadCSS(`${window.hlx.codeBasePath}/blocks/sidebar/sidebar.css`);
     decorateMain(main);
     document.body.classList.add('appear');
     await loadSection(main.querySelector('.section'), waitForFirstImage);

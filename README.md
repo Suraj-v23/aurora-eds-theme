@@ -8,7 +8,7 @@ A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services
 
 - No build step, no web fonts, no dependencies at runtime
 - Rebrand the whole site from one block of CSS variables
-- 24 blocks, 5 theme presets, 5 font styles and a live theme customizer panel, each authored as a plain table
+- 24 blocks, 7 theme presets, 5 font styles and a live theme customizer panel, each authored as a plain table
 - Interactive components (tabs, carousel, accordion, modal, embed) in plain JavaScript
 - A live block library page that documents every block
 - Dark by default with a warm orange accent, scroll animations, visible focus rings, reduced-motion support
@@ -79,7 +79,7 @@ Each block is a table in your document. The first row is the block name. See eve
 | **Breadcrumb** | Empty, or links | Empty builds Home / path from the URL. Page metadata `breadcrumb` = `on` adds it to the top automatically. |
 | **Marquee** | One row, any cells | Text or logos looping sideways. Pauses on hover. Variant: `Marquee (reverse)`. |
 | **Timeline** | One per event | Date, then heading and text. Alternates sides on desktop. |
-| **Sidebar** | One | Cell 1: list of `#` links (sticky, highlights current heading). Cell 2: content. |
+| **Sidebar** | One | Cell 1: nav links (bold-only paragraph or heading + list = group; sticky, highlights current; collapses to a Menu button on mobile). Cell 2: content. Variants: `docs` (760px column), `toc` (adds "On this page"). |
 | **Animated Text** | Two | Row 1: text before. Row 2: list of words to cycle. |
 | **Feature Grid** | One per tile | Optional icon line, heading, text. First tile is larger. Variants: `wide`, `uniform`. |
 
@@ -104,10 +104,11 @@ Add a **Section Metadata** table with a `Style` row. Combine with commas, for ex
 
 ## Themes and customizer
 
-- **Presets:** set `data-theme` on `<html>` to `ember` (default), `light`, `midnight`, `forest` or `mono`. Each preset only overrides CSS variables.
+- **Presets:** set `data-theme` on `<html>` to `ember` (default), `light`, `midnight`, `forest`, `mono`, `docs` (calm documentation look) or `docs-dark`. Each preset only overrides CSS variables.
 - **Fonts:** `data-font` = `classic`, `modern`, `mono`, `rounded` or `editorial`. System stacks only.
 - **Motion:** `data-motion="off"` disables all animation (reduced-motion users get this automatically).
-- **Customizer panel:** a round button at the bottom right ([`scripts/theme-panel.js`](scripts/theme-panel.js)) lets visitors pick preset, accent color, font and motion. Choices are saved in `localStorage`. Disable it on a page with page metadata `theme-panel` = `off`.
+- **Customizer panel:** a "Customize" button at the bottom right ([`scripts/theme-panel.js`](scripts/theme-panel.js)) lets visitors pick preset, accent color, font and motion. Choices are saved in `localStorage`. Disable it on a page with page metadata `theme-panel` = `off`.
+- **Docs template:** set page metadata `template` = `docs`, `sidebar` = path of a nav fragment (for example `/drafts/docs-nav`: bold-only paragraphs as group labels, each followed by a list of links) and optionally `theme` = `docs`. The page gets a left navigation, a 760px content column and an "On this page" outline from its h2/h3. `theme` sets the default preset for visitors who have not chosen one. See `drafts/docs.html`.
 - **Default theme:** edit the `:root` tokens in `styles/styles.css` (they are the ember theme).
 
 ## Development

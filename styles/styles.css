@@ -116,6 +116,59 @@
   --border-color: #333;
 }
 
+/* docs: calm documentation look (flat, bordered, no glow) */
+[data-theme^="docs"] {
+  --background-color: #fff;
+  --surface-color: #f8f8f8;
+  --light-color: #f3f3f3;
+  --dark-color: #6b6b6b;
+  --text-color: #2c2c2c;
+  --link-color: #5758e0;
+  --link-hover-color: #3e3fc4;
+  --accent-color: #6e6ff0;
+  --accent-2: #8587f5;
+  --accent-3: #6e6ff0;
+  --on-accent: #fff;
+  --night-color: #1f1f1f;
+  --border-color: #eaeaea;
+  --border-strong: #d6d6d6;
+  --radius: 8px;
+  --shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  --gradient: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color) 75%, #fff));
+  --heading-font-family: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
+  --heading-spacing: -0.02em;
+  --hero-glow: linear-gradient(#0000, #0000);
+  --hero-grid: 0;
+  --hero-bg: var(--surface-color);
+  --hero-fg: var(--text-color);
+  --hero-muted: var(--dark-color);
+  --footer-bg: var(--surface-color);
+  --footer-text: var(--dark-color);
+  --footer-link: var(--text-color);
+  --footer-border: 1px solid var(--border-color);
+  --cta-bg: color-mix(in srgb, var(--accent-color) 9%, var(--background-color));
+  --cta-ink: var(--text-color);
+  --cta-on: var(--background-color);
+}
+
+[data-theme="docs-dark"] {
+  --background-color: #1b1b1b;
+  --surface-color: #262626;
+  --light-color: #222;
+  --dark-color: #a3a3a3;
+  --text-color: #e1e1e1;
+  --link-color: #9d9ef8;
+  --link-hover-color: #bcbdfb;
+  --accent-color: #8587f5;
+  --accent-2: #9d9ef8;
+  --accent-3: #8587f5;
+  --on-accent: #14143a;
+  --night-color: #111;
+  --border-color: #3a3a3a;
+  --border-strong: #4a4a4a;
+  --shadow: 0 1px 3px rgb(0 0 0 / 40%);
+}
+
 [data-font="classic"] {
   --heading-font-family: "Iowan Old Style", "Palatino Linotype", palatino, georgia, serif;
   --body-font-family: system-ui, -apple-system, "Segoe UI", roboto, sans-serif;
@@ -471,25 +524,25 @@ main .section.cta {
   --link-color: var(--night-color);
   --link-hover-color: #000;
 
-  background: var(--gradient);
-  color: #1a0e07;
+  background: var(--cta-bg, var(--gradient));
+  color: var(--cta-ink, #1a0e07);
   text-align: center;
 }
 
 main .section.cta a.button.primary {
-  border-color: #1a0e07;
-  background-color: #1a0e07;
-  color: #fff;
+  border-color: var(--cta-ink, #1a0e07);
+  background-color: var(--cta-ink, #1a0e07);
+  color: var(--cta-on, #fff);
 }
 
 main .section.cta a.button.secondary {
-  border-color: #1a0e07;
-  color: #1a0e07;
+  border-color: var(--cta-ink, #1a0e07);
+  color: var(--cta-ink, #1a0e07);
 }
 
 main .section.cta a.button.secondary:hover {
   background-color: rgb(0 0 0 / 12%);
-  color: #1a0e07;
+  color: var(--cta-ink, #1a0e07);
 }
 
 :focus-visible {
@@ -532,4 +585,10 @@ main .section.center h2 {
 ::selection {
   background: color-mix(in srgb, var(--accent-color) 45%, transparent);
   color: var(--text-color);
+}
+
+/* docs presets: no lift on hover */
+[data-theme^="docs"] a.button:hover,
+[data-theme^="docs"] .cards > ul > li:hover {
+  transform: none;
 }
