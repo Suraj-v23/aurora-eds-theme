@@ -50,6 +50,18 @@
     <h2 id="modal">Modal</h2>
     <p>One row. Column 1: button label. Column 2: dialog content. Escape or a click outside closes it.</p>
     <div class="modal"><div><div>Open the dialog</div><div><h3>Hello from a modal</h3><p>Built on the native dialog element, so focus trapping and Escape come free.</p></div></div></div>
+    <h2 id="gallery">Gallery</h2>
+    <p>Put one image per cell. Clicking a thumbnail opens a lightbox with previous/next, arrow keys and Escape; the alt text is the caption.</p>
+    <div class="gallery"><div><div><picture><img src="/drafts/media/gallery-1.svg" alt="Sample photo 1" width="640" height="420" loading="lazy"></picture></div></div><div><div><picture><img src="/drafts/media/gallery-2.svg" alt="Sample photo 2" width="640" height="420" loading="lazy"></picture></div></div><div><div><picture><img src="/drafts/media/gallery-3.svg" alt="Sample photo 3" width="640" height="420" loading="lazy"></picture></div></div><div><div><picture><img src="/drafts/media/gallery-4.svg" alt="Sample photo 4" width="640" height="420" loading="lazy"></picture></div></div><div><div><picture><img src="/drafts/media/gallery-5.svg" alt="Sample photo 5" width="640" height="420" loading="lazy"></picture></div></div><div><div><picture><img src="/drafts/media/gallery-6.svg" alt="Sample photo 6" width="640" height="420" loading="lazy"></picture></div></div></div>
+    <h2 id="image-compare">Image compare</h2>
+    <p>One row with two images: before, then after. Drag the handle or use the arrow keys on the slider.</p>
+    <div class="image-compare"><div><div><picture><img src="/drafts/media/compare-before.svg" alt="Before: grey draft" width="640" height="420" loading="lazy"></picture></div><div><picture><img src="/drafts/media/compare-after.svg" alt="After: finished design" width="640" height="420" loading="lazy"></picture></div></div></div>
+    <h2 id="hotspot">Hotspot</h2>
+    <p>Row 1: image. Every other row: x position (%), y position (%), then the popover text. Pins open on click or Enter.</p>
+    <div class="hotspot"><div><div><picture><img src="/drafts/media/app.svg" alt="Product screenshot" width="640" height="420" loading="lazy"></picture></div></div><div><div>25</div><div>30</div><div><p><strong>Navigation</strong></p><p>Everything is one tap away.</p></div></div><div><div>70</div><div>45</div><div><p><strong>Live preview</strong></p><p>Changes show up as you type.</p></div></div><div><div>50</div><div>82</div><div><p><strong>Publish</strong></p><p>One button ships it to the edge.</p></div></div></div>
+    <h2 id="video">Video</h2>
+    <p>One row: video link (mp4, YouTube or Vimeo) and an optional poster image. The player loads only after the visitor presses play.</p>
+    <div class="video"><div><div><a href="https://www.youtube.com/watch?v=aqz-KE-bpKQ">https://www.youtube.com/watch?v=aqz-KE-bpKQ</a></div><div><picture><img src="/drafts/media/app.svg" alt="Play the demo video" width="640" height="420" loading="lazy"></picture></div></div></div>
     <h2 id="callout">Callout</h2>
     <p>One cell of content. Variants: Callout (success), Callout (warning).</p>
     <div class="callout"><div><div><p><strong>Note.</strong> The default callout uses your brand color.</p></div></div></div>
@@ -109,6 +121,18 @@
       <div><div><h3>Basic</h3><p>$9</p><ul><li>Feature one</li><li>Feature two</li></ul><p><em><a href="#">Choose</a></em></p></div><div></div></div>
       <div><div><h3>Pro</h3><p>$29</p><ul><li>Everything in Basic</li><li>Feature three</li></ul><p><strong><a href="#">Choose</a></strong></p></div><div>Best value</div></div>
     </div>
+    <h2 id="page-list">Page list</h2>
+    <p>Lists pages from <code>/query-index.json</code> as cards. If there is no index, it shows the links authored in the block. Optional config rows: <code>filter</code> (path prefix), <code>limit</code>, <code>search</code> (on).</p>
+    <div class="page-list"><div><div>limit</div><div>6</div></div><div><div>search</div><div>on</div></div><div><div><a href="/library">Block library</a></div><div>Every block, live, with authoring notes.</div></div><div><div><a href="/docs">Documentation</a></div><div>The docs template with side navigation.</div></div><div><div><a href="/developer">Developer tools</a></div><div>Admin API helper and cheat sheet.</div></div></div>
+    <h2 id="form">Form</h2>
+    <p>One row per field: Label, Type (text, email, textarea, select, checkbox), Required, Options. Last row: <code>submit</code>, button label, endpoint URL. Without an endpoint it shows a demo message and sends nothing.</p>
+    <div class="form"><div><div>Name</div><div>text</div><div>yes</div></div><div><div>Email</div><div>email</div><div>yes</div></div><div><div>Topic</div><div>select</div><div>no</div><div>Support, Sales, Feedback</div></div><div><div>Message</div><div>textarea</div><div>no</div></div><div><div>I agree to be contacted</div><div>checkbox</div><div>yes</div></div><div><div>submit</div><div>Send message</div><div></div></div></div>
+    <h2 id="countdown">Countdown</h2>
+    <p>One row: target date and time (for example <code>2030-01-01 09:00</code>), then a label. Optional third cell: text shown when it ends. It updates once a second.</p>
+    <div class="countdown"><div><div>2030-01-01 00:00</div><div>New year 2030 starts in</div></div></div>
+    <h2 id="admin-api">Admin API helper</h2>
+    <p>For developers: pick an operation and copy the matching curl command. Optional rows <code>org</code>, <code>site</code>, <code>ref</code>, <code>path</code> pre-fill the fields. It never calls the API and never accepts a token.</p>
+    <div class="admin-api"><div><div>org</div><div>my-org</div></div><div><div>site</div><div>my-site</div></div></div>
     <h2 id="breadcrumb">Breadcrumb</h2>
     <p>Empty block: builds Home / segments from the URL. Or list links, one per cell; the last cell is the current page. Set page metadata breadcrumb = on to add it automatically.</p>
     <div class="breadcrumb"><div><div><a href="/">Home</a></div><div><a href="/library">Block library</a></div><div>Breadcrumb</div></div></div>

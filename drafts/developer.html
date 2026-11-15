@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Developer tools: Aurora theme</title>
+  <meta name="description" content="Build Admin API curl commands for AEM Edge Delivery Services: preview, publish, cache purge, code sync and config.">
+  <meta name="template" content="docs">
+  <meta name="theme" content="docs">
+  <meta name="sidebar" content="/drafts/developer-nav">
+  <meta name="nav" content="/drafts/nav">
+  <meta name="footer" content="/drafts/footer">
+  <!-- local demo only: on a real site these lines come from head.html -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/scripts/aem.js" type="module"></script>
+  <script src="/scripts/scripts.js" type="module"></script>
+  <link rel="stylesheet" href="/styles/styles.css">
+</head>
+<body>
+<header></header>
+<main>
+  <div>
+    <h1 id="developer-tools">Developer tools</h1>
+    <p>Choose an operation, fill in your org and site, and copy the curl command. This page only builds text: it never calls the Admin API and never asks for a token.</p>
+    <div class="admin-api"><div><div>ref</div><div>main</div></div></div>
+    <div class="callout warning"><div><div><p><strong>Replace, not append.</strong> A POST to an <code>access/admin.json</code> config path replaces the whole list it targets. Read the current list first, add your change, then send the complete list back.</p></div></div></div>
+    <h2 id="common-calls">Common calls</h2>
+    <p>Every call goes to <code>https://admin.hlx.page</code>. See the <a href="https://www.aem.live/docs/admin.html">Admin API reference</a> for every parameter and response.</p>
+  </div>
+  <div>
+    <div class="table"><div><div>Goal</div><div>Method</div><div>Path</div></div><div><div>Check a page</div><div>GET</div><div>/status/{org}/{site}/{ref}/{path}</div></div><div><div>Refresh the preview</div><div>POST</div><div>/preview/{org}/{site}/{ref}/{path}</div></div><div><div>Publish</div><div>POST</div><div>/live/{org}/{site}/{ref}/{path}</div></div><div><div>Unpublish</div><div>DELETE</div><div>/live/{org}/{site}/{ref}/{path}</div></div><div><div>Purge the CDN cache</div><div>POST</div><div>/cache/{org}/{site}/{ref}/{path}</div></div><div><div>Sync code from GitHub</div><div>POST</div><div>/code/{org}/{site}/{ref}/{path}</div></div><div><div>Read site config</div><div>GET</div><div>/config/{org}/sites/{site}.json</div></div><div><div>List org users</div><div>GET</div><div>/config/{org}/users.json</div></div></div>
+  </div>
+  <div>
+    <h2 id="getting-a-token">Getting a token</h2>
+    <p>Sign in at <a href="https://admin.hlx.page/login">admin.hlx.page</a> with the account that has access to your project. Copy the session token the way the Admin API documentation describes, then store it only in an environment variable.</p>
+    <pre><code>export AEM_TOKEN="paste-your-token-here"</code></pre>
+    <h2 id="keeping-it-safe">Keeping it safe</h2>
+    <p>A token acts as you, so treat it like a password.</p>
+    <ul>
+      <li>Never paste it into chat, tickets, or this page.</li>
+      <li>Never commit it to code or a repository. Commands reference <code>$AEM_TOKEN</code> and nothing else.</li>
+      <li>Tokens expire. Sign in again and replace the variable when calls start returning 401.</li>
+    </ul>
+  </div>
+</main>
+<footer></footer>
+</body>
+</html>

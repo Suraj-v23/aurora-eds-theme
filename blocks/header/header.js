@@ -115,6 +115,33 @@ export default async function decorate(block) {
     brandLink.closest('.button-container').className = '';
   }
 
+  // site search: icon button before the CTA; the dialog code loads on first use
+  let navTools = nav.querySelector('.nav-tools');
+  if (!navTools) {
+    navTools = document.createElement('div');
+    navTools.className = 'nav-tools';
+    nav.append(navTools);
+  }
+  const searchBtn = document.createElement('button');
+  searchBtn.type = 'button';
+  searchBtn.className = 'nav-search';
+  searchBtn.setAttribute('aria-label', 'Search the site');
+  searchBtn.setAttribute('aria-haspopup', 'dialog');
+  searchBtn.title = 'Search (Ctrl K)';
+  searchBtn.innerHTML = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
+  const openSearch = () => import('./search.js').then((m) => m.openSearch(searchBtn));
+  searchBtn.addEventListener('click', openSearch);
+  navTools.prepend(searchBtn);
+  document.addEventListener('keydown', (e) => {
+    const t = e.target;
+    const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable;
+    if (document.querySelector('dialog[open]')) return;
+    if (((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') || (e.key === '/' && !typing && !e.metaKey && !e.ctrlKey)) {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {

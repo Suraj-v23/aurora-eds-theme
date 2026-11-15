@@ -1,0 +1,73 @@
+/* Hotspot: pins over an image with popovers. */
+.hotspot-stage {
+  margin-top: 16px;
+  position: relative;
+  line-height: 0;
+}
+
+.hotspot-stage img {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+}
+
+.hotspot-pin {
+  position: absolute;
+  top: var(--y);
+  left: var(--x);
+  box-sizing: border-box;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  border: 3px solid var(--on-accent);
+  border-radius: 50%;
+  padding: 0;
+  background: var(--link-color);
+  box-shadow: 0 0 0 5px color-mix(in srgb, var(--link-color) 35%, transparent), 0 4px 12px rgb(0 0 0 / 40%);
+  cursor: pointer;
+}
+
+.hotspot-pin:hover,
+.hotspot-pin[aria-expanded="true"] {
+  transform: scale(1.12);
+}
+
+.hotspot-pin:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 4px;
+}
+
+.hotspot-pop {
+  position: absolute;
+  z-index: 1;
+  top: var(--y);
+  left: clamp(120px, var(--x), calc(100% - 120px));
+  box-sizing: border-box;
+  width: 240px;
+  max-width: calc(100% - 16px);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--surface-color);
+  color: var(--text-color);
+  box-shadow: var(--shadow);
+  font-size: 15px;
+  line-height: 1.45;
+  transform: translate(-50%, calc(-100% - 22px));
+}
+
+.hotspot-pop.below {
+  transform: translate(-50%, 22px);
+}
+
+.hotspot-pop[hidden] {
+  display: none;
+}
+
+.hotspot-pop > :first-child {
+  margin-top: 0;
+}
+
+.hotspot-pop > :last-child {
+  margin-bottom: 0;
+}

@@ -1,0 +1,91 @@
+/* Admin API helper: inputs + generated curl command. */
+.admin-api {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  background: var(--surface-color);
+}
+
+.admin-api .admin-api-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 14px;
+}
+
+.admin-api .admin-api-form > div {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-api .admin-api-form > div[hidden] {
+  display: none;
+}
+
+.admin-api label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-api input,
+.admin-api select {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+}
+
+.admin-api .admin-api-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.admin-api .admin-api-method {
+  border-radius: 6px;
+  padding: 2px 10px;
+  background: var(--link-color);
+  color: var(--on-accent);
+  font: 700 13px/1.6 ui-monospace, monospace;
+}
+
+.admin-api .admin-api-method[data-method="DELETE"] {
+  background: #dc2626;
+  color: #fff;
+}
+
+.admin-api .admin-api-explain {
+  font-size: 15px;
+}
+
+.admin-api pre {
+  margin: 12px 0;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 14px 16px;
+  background: var(--background-color);
+  overflow-x: auto;
+}
+
+.admin-api code {
+  background: none;
+  font-size: 14px;
+  white-space: pre;
+}
+
+.admin-api .admin-api-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+}
+
+.admin-api .admin-api-actions button {
+  padding: 0.4em 1.2em;
+}
+
+.admin-api .admin-api-note {
+  margin: 12px 0 0;
+  color: var(--dark-color);
+  font-size: 14px;
+}

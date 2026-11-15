@@ -1,0 +1,73 @@
+/* Image compare: before/after slider. */
+.image-compare-stage {
+  --pos: 50%;
+
+  position: relative;
+  margin-top: 16px;
+  overflow: hidden;
+  border-radius: var(--radius);
+  line-height: 0;
+}
+
+.image-compare-stage img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.image-compare-after {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(0 0 0 var(--pos));
+}
+
+.image-compare-after img {
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-compare-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--pos);
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--on-accent);
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 30%);
+  pointer-events: none;
+}
+
+.image-compare-handle::after {
+  content: '\2194';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--link-color);
+  color: var(--on-accent);
+  font: 20px/1 system-ui, sans-serif;
+  transform: translate(-50%, -50%);
+}
+
+.image-compare-stage input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  opacity: 0;
+  cursor: ew-resize;
+  appearance: none;
+}
+
+.image-compare-stage:has(input:focus-visible) {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 3px;
+}

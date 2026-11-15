@@ -1,0 +1,68 @@
+/* Form: author-defined fields. */
+.form form {
+  display: grid;
+  gap: 16px;
+  max-width: 560px;
+}
+
+.form .form-field {
+  display: grid;
+  gap: 6px;
+}
+
+.form label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.form input:not([type="checkbox"]),
+.form textarea,
+.form select {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+}
+
+.form textarea {
+  min-height: 120px;
+}
+
+.form .form-error {
+  color: #ef4444;
+  font-size: 14px;
+}
+
+.form .form-checkbox {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.form .form-checkbox .form-error {
+  grid-column: 2;
+}
+
+.form [aria-invalid="true"] {
+  border-color: #dc2626;
+}
+
+.form .form-error:empty {
+  display: none;
+}
+
+.form button[type="submit"] {
+  justify-self: start;
+}
+
+.form .form-status {
+  margin: 0;
+  font-size: 15px;
+}
+
+.form .form-status.ok {
+  color: #16a34a;
+}
+
+.form .form-status.error {
+  color: #ef4444;
+}

@@ -272,4 +272,42 @@ header nav .nav-sections .nav-drop > button[aria-expanded='false'] + ul {
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+header nav .nav-tools p.button-wrapper {
+  margin: 0;
+}
+
+/* compact call-to-action */
+header nav .nav-tools a.button:any-link {
+  min-height: 36px;
+  padding: 6px 16px;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+header nav .nav-search {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: var(--text-color);
+  cursor: pointer;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+header nav .nav-search:hover,
+header nav .nav-search:focus-visible {
+  border-color: var(--link-color);
+  background: var(--light-color);
 }

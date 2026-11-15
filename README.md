@@ -8,7 +8,7 @@ A free, fast, ready-to-author landing page theme for [AEM Edge Delivery Services
 
 - No build step, no web fonts, no dependencies at runtime
 - Rebrand the whole site from one block of CSS variables
-- 24 blocks, 7 theme presets, 5 font styles and a live theme customizer panel, each authored as a plain table
+- 32 blocks, 7 theme presets, 5 font styles and a live theme customizer panel, each authored as a plain table
 - Interactive components (tabs, carousel, accordion, modal, embed) in plain JavaScript
 - A live block library page that documents every block
 - Dark by default with a warm orange accent, scroll animations, visible focus rings, reduced-motion support
@@ -83,11 +83,29 @@ Each block is a table in your document. The first row is the block name. See eve
 | **Animated Text** | Two | Row 1: text before. Row 2: list of words to cycle. |
 | **Feature Grid** | One per tile | Optional icon line, heading, text. First tile is larger. Variants: `wide`, `uniform`. |
 
-**From the boilerplate:** Fragment, Header, Footer.
+**Media, data and developer blocks**
+
+| Block | Rows | Columns |
+|---|---|---|
+| **Gallery** | Any | One image per cell; click opens a lightbox (alt text = caption) |
+| **Image Compare** | One | Before image, after image. Slider works with mouse, touch and arrow keys. |
+| **Hotspot** | Row 1 image, then one per pin | x %, y %, popover content |
+| **Video** | One | mp4, YouTube or Vimeo link, optional poster image. Player loads on click. |
+| **Page List** | Config rows, or links | `filter`, `limit`, `search` rows. Cards come from `/query-index.json`, falling back to the authored links. |
+| **Form** | One per field | Label, type (`text`, `email`, `textarea`, `select`, `checkbox`), required, options. Last row: `submit`, label, endpoint (JSON POST; no endpoint = demo message). |
+| **Countdown** | One | Target date/time, label, optional finished text |
+| **Admin API** | Optional config rows | `org`, `site`, `ref`, `path`. Builds an Admin API curl command with a `$AEM_TOKEN` placeholder; never calls the API. |
+
+**From the boilerplate:** Fragment, Header, Footer. Fragment, Header, Footer.
 
 Buttons: make a link **bold** for a primary button, *italic* for a secondary button.
 
 Eyebrow labels: an italic-only line directly above any heading becomes a small uppercase label.
+
+## Site search and developer page
+
+- **Header search:** the header has a search button (also Ctrl/Cmd+K or `/`) that opens a dialog with live results. It reads `/query-index.json`; without one it crawls the pages linked from the nav and sidebar fragments. Code: [`blocks/header/search.js`](blocks/header/search.js). `tools/build-demo.sh` generates a query index for the demo.
+- **Developer page:** [`drafts/developer.html`](drafts/developer.html) (`/developer`) hosts the Admin API block plus a cheat sheet and token safety notes.
 
 ## Section styles
 

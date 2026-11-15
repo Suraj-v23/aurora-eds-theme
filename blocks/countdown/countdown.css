@@ -1,0 +1,39 @@
+/* Countdown: static digits, updated once a second. */
+.countdown {
+  text-align: center;
+}
+
+.countdown .countdown-label {
+  margin: 0 0 14px;
+  font-weight: 600;
+}
+
+.countdown .countdown-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  font-size: var(--heading-font-size-s);
+}
+
+.countdown .countdown-grid > div {
+  min-width: 88px;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 14px 10px;
+  background: var(--surface-color);
+}
+
+.countdown strong {
+  display: block;
+  font-size: var(--heading-font-size-xl);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+
+.countdown span {
+  color: var(--dark-color);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}

@@ -18,11 +18,11 @@ function spy(links) {
   targets.forEach((_, el) => observer.observe(el));
 }
 
-/** Filter box: hides links that don't match, Enter opens the first match, "/" focuses it. */
+/** Filter box: hides links that don't match, Enter opens the first match. */
 function addSearch(nav) {
   const wrap = document.createElement('div');
   wrap.className = 'docs-search';
-  wrap.innerHTML = '<input type="search" placeholder="Search" aria-label="Search the menu" autocomplete="off"><kbd aria-hidden="true">/</kbd><p class="docs-empty" hidden>No matches</p>';
+  wrap.innerHTML = '<input type="search" placeholder="Search" aria-label="Search the menu" autocomplete="off"><p class="docs-empty" hidden>No matches</p>';
   const input = wrap.querySelector('input');
   const empty = wrap.querySelector('.docs-empty');
   const items = [...nav.querySelectorAll('li')];
@@ -39,12 +39,6 @@ function addSearch(nav) {
   input.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') nav.querySelector('li:not([hidden]) a')?.click();
     if (e.key === 'Escape') { input.value = ''; filter(); }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === '/' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName) && !document.activeElement.isContentEditable) {
-      e.preventDefault();
-      input.focus();
-    }
   });
   nav.prepend(wrap);
 }
