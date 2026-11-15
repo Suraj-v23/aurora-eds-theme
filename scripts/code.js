@@ -61,7 +61,7 @@ export default function decorateCodeBlocks(main) {
     const cls = [...code.classList, ...pre.classList].find((c) => c.startsWith('language-'));
     const hint = text.match(/^(?:\/\/|#|<!--)\s*lang:\s*(\w+)[ \t]*(?:-->)?\n/);
     if (hint) text = text.slice(hint[0].length);
-    const raw = (cls ? cls.slice(9) : hint?.[1] || guess(text)).toLowerCase();
+    const raw = (cls ? cls.slice(9) : hint?.[1] || guess(text)).toLowerCase().replace(/[^a-z0-9+#-]/g, '').slice(0, 16);
     const lang = ALIAS[raw] || raw;
     code.replaceChildren(...(LANGS[lang] ? highlight(text, LANGS[lang]) : [text]));
     if (code === pre) pre.replaceChildren(el('code', null, ...pre.childNodes));

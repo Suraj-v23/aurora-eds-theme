@@ -141,7 +141,8 @@ function decorateButtons(main) {
  */
 function maskIcons(main) {
   main.querySelectorAll('span.icon > img').forEach((img) => {
-    img.parentElement.style.setProperty('--icon', `url(${img.src})`);
+    // quoted + stripped so an odd icon name can't break out of url()
+    img.parentElement.style.setProperty('--icon', `url("${img.src.replace(/["\\\n\r]/g, '')}")`);
     img.parentElement.classList.add('masked');
   });
 }

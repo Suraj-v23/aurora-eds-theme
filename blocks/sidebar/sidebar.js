@@ -1,5 +1,5 @@
 import { decorateBlock, loadBlock } from '../../scripts/aem.js';
-import { el, slugify } from '../../scripts/utils.js';
+import { el, safeUrl, slugify } from '../../scripts/utils.js';
 
 const trim = (p) => p.replace(/\/(index(\.html)?)?$/, '') || '/';
 
@@ -93,7 +93,8 @@ function addPager(main, nav) {
     if (!a.hash && !pages.some((p) => trim(p.pathname) === trim(a.pathname))) pages.push(a);
   });
   const i = pages.findIndex((a) => trim(a.pathname) === trim(window.location.pathname));
-  const link = (a, cls, label) => a && el('a', { href: a.getAttribute('href'), class: cls }, el('small', null, label), a.textContent.trim());
+  const link = (a, cls, label) => a && safeUrl(a.getAttribute('href'))
+    && el('a', { href: safeUrl(a.getAttribute('href')), class: cls }, el('small', null, label), a.textContent.trim());
   const [prev, next] = [pages[i - 1], pages[i + 1]];
   const last = main.querySelector(':scope > .section:last-of-type');
   if (i < 0 || !last || (!prev && !next)) return;
