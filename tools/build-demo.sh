@@ -45,5 +45,38 @@ const data = [];
 });
 fs.writeFileSync(`${out}/query-index.json`, JSON.stringify({ total: data.length, offset: 0, limit: data.length, data }));
 JS
+# SEO: canonical + social preview tags on each page, and a sitemap
+ORIGIN="${2:-https://suraj-v23.github.io}"
+cp docs/screenshot.png "$OUT/og-image.png"
+node - "$OUT" "$BASE" "$ORIGIN" <<'JS'
+const fs = require('fs');
+const [out, base, origin] = process.argv.slice(2);
+const pages = ['index.html', 'library/index.html', 'docs/index.html', 'developer/index.html'];
+const urls = pages.map((p) => {
+  const file = `${out}/${p}`;
+  const url = `${origin}${base}/${p.replace(/index\.html$/, '')}`;
+  let html = fs.readFileSync(file, 'utf8');
+  const title = (html.match(/<title>([^<]*)<\/title>/) || [])[1] || '';
+  const desc = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1] || '';
+  const tags = [
+    `<link rel="canonical" href="${url}">`,
+    '<meta property="og:type" content="website">',
+    `<meta property="og:url" content="${url}">`,
+    `<meta property="og:title" content="${title}">`,
+    `<meta property="og:description" content="${desc}">`,
+    `<meta property="og:image" content="${origin}${base}/og-image.png">`,
+    '<meta name="twitter:card" content="summary_large_image">',
+  ].join('\n  ');
+  html = html.replace('</title>', `</title>\n  ${tags}`);
+  fs.writeFileSync(file, html);
+  return url;
+});
+const today = new Date().toISOString().slice(0, 10);
+fs.writeFileSync(`${out}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map((u) => `  <url><loc>${u}</loc><lastmod>${today}</lastmod></url>`).join('\n')}
+</urlset>
+`);
+JS
 touch "$OUT/.nojekyll"
 echo "Built $OUT for base $BASE"
