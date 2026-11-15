@@ -308,6 +308,15 @@ a:hover {
   text-decoration: underline;
 }
 
+/* links inside running text need more than color to stand out */
+main p > a:any-link,
+main li > a:any-link,
+main td > a:any-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
 /* buttons */
 p.button-wrapper {
   display: inline-block;

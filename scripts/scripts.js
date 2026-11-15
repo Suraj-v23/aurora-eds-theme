@@ -56,14 +56,16 @@ async function loadFonts() {
  */
 function buildAutoBlocks(main) {
   try {
-    if (getMetadata('breadcrumb') === 'on' && !main.querySelector('.breadcrumb')) {
+    // page-level auto blocks only for the page's own <main>, never for fragments
+    const isPage = main === document.querySelector('main');
+    if (isPage && getMetadata('breadcrumb') === 'on' && !main.querySelector('.breadcrumb')) {
       const section = document.createElement('div');
       section.append(buildBlock('breadcrumb', ''));
       main.prepend(section);
     }
     // docs template: nav fragment (metadata `sidebar`) + content + "on this page" TOC
     const tpl = getMetadata('template');
-    if (['docs', 'library'].includes(tpl) && getMetadata('sidebar') && !main.querySelector('.sidebar')) {
+    if (isPage && ['docs', 'library'].includes(tpl) && getMetadata('sidebar') && !main.querySelector('.sidebar')) {
       main.classList.add('docs-layout');
       if (tpl === 'library') main.classList.add('docs-wide');
       // eslint-disable-next-line import/no-cycle

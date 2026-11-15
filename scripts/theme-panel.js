@@ -47,6 +47,7 @@ const fab = document.createElement('button');
 fab.type = 'button';
 fab.className = 'theme-panel-toggle';
 fab.setAttribute('aria-haspopup', 'dialog');
+fab.setAttribute('aria-label', 'Customize theme');
 fab.innerHTML = '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c1.400 0 2-1 2-2 0-1.500-1-1.600-1-2.800 0-1 .8-1.700 1.800-1.700H17a4 4 0 0 0 4-4c0-4-4-7.500-9-7.500Z"/><circle cx="7.500" cy="11" r="1" fill="currentcolor"/><circle cx="10.500" cy="7" r="1" fill="currentcolor"/><circle cx="15" cy="7.500" r="1" fill="currentcolor"/></svg><span>Customize</span>';
 
 function apply() {

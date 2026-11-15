@@ -6,14 +6,19 @@ const trim = (p) => p.replace(/\/(index(\.html)?)?$/, '') || '/';
 function spy(links) {
   const targets = new Map();
   links.forEach((a) => {
+    if (trim(a.pathname) !== trim(window.location.pathname)) return;
     const el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
     if (el) targets.set(el, a);
   });
+  if (!targets.size) return;
+  let active;
   const observer = new IntersectionObserver((entries) => {
-    entries.filter((e) => e.isIntersecting).forEach((e) => {
-      links.forEach((l) => l.removeAttribute('aria-current'));
-      targets.get(e.target).setAttribute('aria-current', 'true');
-    });
+    const hit = entries.filter((e) => e.isIntersecting).pop();
+    const link = hit && targets.get(hit.target);
+    if (!link || link === active) return;
+    active?.removeAttribute('aria-current');
+    link.setAttribute('aria-current', 'true');
+    active = link;
   }, { rootMargin: '0px 0px -75% 0px' });
   targets.forEach((_, el) => observer.observe(el));
 }
