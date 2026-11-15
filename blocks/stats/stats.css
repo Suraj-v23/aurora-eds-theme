@@ -1,7 +1,7 @@
 .stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 32px;
+  gap: var(--space-6);
   text-align: center;
 }
 

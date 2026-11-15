@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Developer tools: Aurora theme</title>
-  <meta name="description" content="Build Admin API curl commands for AEM Edge Delivery Services: preview, publish, cache purge, code sync and config.">
+  <title>Developer guide: Aurora theme</title>
+  <meta name="description" content="Admin API recipes, building a block, utils.js reference and troubleshooting for AEM Edge Delivery Services.">
   <meta name="template" content="docs">
   <meta name="theme" content="docs">
   <meta name="sidebar" content="/drafts/developer-nav">
@@ -19,27 +19,133 @@
 <header></header>
 <main>
   <div>
-    <h1 id="developer-tools">Developer tools</h1>
-    <p>Choose an operation, fill in your org and site, and copy the curl command. This page only builds text: it never calls the Admin API and never asks for a token.</p>
+    <h1 id="developer-tools">Developer guide</h1>
+    <p>Recipes for the Admin API, a walkthrough for building a block and a reference for the helpers in this repo. The command builder below only prints text: it never calls the Admin API and never asks for a token.</p>
     <div class="admin-api"><div><div>ref</div><div>main</div></div></div>
     <div class="callout warning"><div><div><p><strong>Replace, not append.</strong> A POST to an <code>access/admin.json</code> config path replaces the whole list it targets. Read the current list first, add your change, then send the complete list back.</p></div></div></div>
-    <h2 id="common-calls">Common calls</h2>
-    <p>Every call goes to <code>https://admin.hlx.page</code>. See the <a href="https://www.aem.live/docs/admin.html">Admin API reference</a> for every parameter and response.</p>
-  </div>
-  <div>
-    <div class="table"><div><div>Goal</div><div>Method</div><div>Path</div></div><div><div>Check a page</div><div>GET</div><div>/status/{org}/{site}/{ref}/{path}</div></div><div><div>Refresh the preview</div><div>POST</div><div>/preview/{org}/{site}/{ref}/{path}</div></div><div><div>Publish</div><div>POST</div><div>/live/{org}/{site}/{ref}/{path}</div></div><div><div>Unpublish</div><div>DELETE</div><div>/live/{org}/{site}/{ref}/{path}</div></div><div><div>Purge the CDN cache</div><div>POST</div><div>/cache/{org}/{site}/{ref}/{path}</div></div><div><div>Sync code from GitHub</div><div>POST</div><div>/code/{org}/{site}/{ref}/{path}</div></div><div><div>Read site config</div><div>GET</div><div>/config/{org}/sites/{site}.json</div></div><div><div>List org users</div><div>GET</div><div>/config/{org}/users.json</div></div></div>
-  </div>
-  <div>
-    <h2 id="getting-a-token">Getting a token</h2>
-    <p>Sign in at <a href="https://admin.hlx.page/login">admin.hlx.page</a> with the account that has access to your project. Copy the session token the way the Admin API documentation describes, then store it only in an environment variable.</p>
-    <pre><code>export AEM_TOKEN="paste-your-token-here"</code></pre>
-    <h2 id="keeping-it-safe">Keeping it safe</h2>
-    <p>A token acts as you, so treat it like a password.</p>
-    <ul>
-      <li>Never paste it into chat, tickets, or this page.</li>
-      <li>Never commit it to code or a repository. Commands reference <code>$AEM_TOKEN</code> and nothing else.</li>
-      <li>Tokens expire. Sign in again and replace the variable when calls start returning 401.</li>
-    </ul>
+    <h2 id="authentication">Authentication</h2>
+    <p>Sign in at <a href="https://admin.hlx.page/login">admin.hlx.page</a> with the account that has access to your project, then read your profile to confirm who you are signed in as. Copy the session token as the <a href="https://www.aem.live/docs/admin.html">Admin API documentation</a> describes and keep it only in an environment variable.</p>
+    <pre><code class="language-bash">export AEM_TOKEN="paste-your-token-here"
+export ORG=your-org SITE=your-site REF=main
+
+# who am I?
+curl -s https://admin.hlx.page/profile -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <div class="callout"><div><div><p><strong>Treat a token like a password.</strong> Never commit it, paste it into chat or a ticket, or write it into a script. Tokens expire: when calls return 401, sign in again and replace the variable.</p></div></div></div>
+    <h2 id="common-workflows">Common workflows</h2>
+    <p>Every call goes to <code>https://admin.hlx.page</code>. The examples assume the variables from the previous section.</p>
+    <div class="table"><div><div>Goal</div><div>Method</div><div>Path</div></div><div><div>Check a page</div><div>GET</div><div><code>/status/{org}/{site}/{ref}/{path}</code></div></div><div><div>Refresh the preview</div><div>POST</div><div><code>/preview/{org}/{site}/{ref}/{path}</code></div></div><div><div>Publish</div><div>POST</div><div><code>/live/{org}/{site}/{ref}/{path}</code></div></div><div><div>Unpublish</div><div>DELETE</div><div><code>/live/{org}/{site}/{ref}/{path}</code></div></div><div><div>Purge the CDN cache</div><div>POST</div><div><code>/cache/{org}/{site}/{ref}/{path}</code></div></div><div><div>Sync code from GitHub</div><div>POST</div><div><code>/code/{org}/{site}/{ref}/{path}</code></div></div><div><div>Read site config</div><div>GET</div><div><code>/config/{org}/sites/{site}.json</code></div></div><div><div>List org users</div><div>GET</div><div><code>/config/{org}/users.json</code></div></div></div>
+    <h3 id="preview-and-publish-one-page">Preview and publish one page</h3>
+    <pre><code class="language-bash">PAGE=docs   # path without a leading slash
+BASE="https://admin.hlx.page"
+curl -X POST "$BASE/preview/$ORG/$SITE/$REF/$PAGE" -H "x-auth-token: $AEM_TOKEN"
+curl -X POST "$BASE/live/$ORG/$SITE/$REF/$PAGE"    -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <h3 id="bulk-publish-with-a-loop">Bulk publish with a loop</h3>
+    <p>List one path per line in <code>paths.txt</code>. The loop stops on the first failed call so you can fix it before continuing.</p>
+    <pre><code class="language-bash">BASE="https://admin.hlx.page"
+while read -r p; do
+  for step in preview live; do
+    curl -sf -X POST "$BASE/$step/$ORG/$SITE/$REF/$p" \
+      -H "x-auth-token: $AEM_TOKEN" -o /dev/null || { echo "failed: $step $p"; exit 1; }
+  done
+  echo "published $p"
+done &lt; paths.txt</code></pre>
+    <h3 id="purge-the-cache">Purge the cache</h3>
+    <pre><code class="language-bash">curl -X POST "https://admin.hlx.page/cache/$ORG/$SITE/$REF/$PAGE" -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <h3 id="sync-code-after-a-push">Sync code after a push</h3>
+    <p>The AEM Code Sync app normally does this for you. Run it by hand if a push did not arrive. End the path with <code>*</code> to sync a whole folder.</p>
+    <pre><code class="language-bash">curl -X POST "https://admin.hlx.page/code/$ORG/$SITE/$REF/*" -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <h3 id="check-status">Check status</h3>
+    <pre><code class="language-bash">curl -s "https://admin.hlx.page/status/$ORG/$SITE/$REF/$PAGE" -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <h3 id="read-the-site-config">Read the site config</h3>
+    <pre><code class="language-bash">curl -s "https://admin.hlx.page/config/$ORG/sites/$SITE.json" -H "x-auth-token: $AEM_TOKEN"</code></pre>
+    <h3 id="list-and-add-org-users">List and add org users</h3>
+    <p>Always read the list first. Writing to an access list replaces it, so send everything that should remain.</p>
+    <pre><code class="language-bash">curl -s "https://admin.hlx.page/config/$ORG/users.json" -H "x-auth-token: $AEM_TOKEN"
+
+curl -X POST "https://admin.hlx.page/config/$ORG/users.json" \
+  -H "x-auth-token: $AEM_TOKEN" -H "Content-Type: application/json" \
+  --data '{"email":"person@example.com","roles":["author"]}'</code></pre>
+    <h3 id="update-the-index-config">Update the index config</h3>
+    <p>Upload your <code>query.yaml</code> (see the <a href="/docs#add-a-query-index">search section</a> of the theme guide). Confirm the exact endpoint in the <a href="https://www.aem.live/docs/">documentation</a>.</p>
+    <pre><code class="language-bash">curl -X POST "https://admin.hlx.page/config/$ORG/sites/$SITE/content/query.yaml" \
+  -H "x-auth-token: $AEM_TOKEN" -H "content-type: text/yaml" --data-binary @query.yaml</code></pre>
+    <h3 id="sitemap-config">Sitemap config</h3>
+    <p>A sitemap is configured the same way, with a <code>sitemap.yaml</code> that points at the index. See the <a href="https://www.aem.live/docs/">sitemap documentation</a> for its format.</p>
+    <pre><code class="language-bash">curl -X POST "https://admin.hlx.page/config/$ORG/sites/$SITE/content/sitemap.yaml" \
+  -H "x-auth-token: $AEM_TOKEN" -H "content-type: text/yaml" --data-binary @sitemap.yaml</code></pre>
+    <h2 id="building-a-block">Building a block</h2>
+    <p>A block is a folder in <code>blocks/</code> with a JavaScript and a CSS file of the same name. The author writes a table; the page delivers it as nested <code>div</code>s, one per row and one per cell, and your <code>decorate</code> function turns that into the final markup.</p>
+    <h3 id="anatomy">Anatomy</h3>
+    <pre><code class="language-text">blocks/facts/
+  facts.js     export default function decorate(block)
+  facts.css    every selector starts with .facts</code></pre>
+    <ul><li>Run <code>curl localhost:3000/your-page.plain.html</code> first to see the real markup you will receive.</li><li>Authors omit and add cells. Read rows and cells defensively and skip anything that is missing.</li><li>Scope all CSS to <code>.facts</code>. Names ending in <code>-wrapper</code> or <code>-container</code> are section classes.</li><li>Build elements with <code>el()</code> from <code>scripts/utils.js</code>. Strings become text nodes, never HTML.</li><li>Only <code>fragment/fragment.js</code> may be imported from another block; everything else shared goes in <code>scripts/</code>.</li></ul>
+    <h3 id="example-facts">Example: facts</h3>
+    <p>A two-column block that renders a definition list. First the authoring table:</p>
+    <pre><code class="language-markdown">| Facts   |                  |
+| ------- | ---------------- |
+| Runtime | Plain JavaScript |
+| Build   | None             |</code></pre>
+    <p>The script:</p>
+    <pre><code class="language-js">import { el } from '../../scripts/utils.js';
+
+/* Facts: one row per fact. Cell 1 = label, cell 2 = value. */
+export default function decorate(block) {
+  const rows = [...block.children].map((row) =&gt; {
+    const [label, value] = row.children;
+    if (!label || !value) return null; // authors omit cells
+    return [el('dt', null, label.textContent.trim()), el('dd', null, ...value.childNodes)];
+  });
+  block.replaceChildren(el('dl', null, rows.filter(Boolean)));
+}</code></pre>
+    <p>And the styles, using the theme tokens:</p>
+    <pre><code class="language-css">.facts dl {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: var(--space-2) var(--space-5);
+  margin: 0;
+}
+
+.facts dt {
+  color: var(--dark-color);
+  font-weight: 600;
+}
+
+.facts dd {
+  margin: 0;
+}
+
+@media (width &lt; 600px) {
+  .facts dl {
+    grid-template-columns: 1fr;
+  }
+}</code></pre>
+    <h3 id="loading-order">Loading order</h3>
+    <p>Edge Delivery loads in three phases. Eager covers the first section and everything needed for the largest paint. Lazy loads the remaining sections, the header and footer, <code>lazy-styles.css</code> and fonts. Delayed, started from <code>loadDelayed()</code> in <code>scripts.js</code>, is for anything that can wait a few seconds. A block is loaded when its section loads, so a block that is not on a page costs nothing there.</p>
+    <h2 id="using-utils-js">Using utils.js</h2>
+    <p>Import helpers from <code>scripts/utils.js</code> instead of writing new ones. All blocks and scripts share them.</p>
+    <div class="table"><div><div>Helper</div><div>Signature</div><div>What it does</div></div><div><div><code>el</code></div><div><code>el(tag, attrs, ...kids)</code></div><div>Safe DOM builder. <code>on*</code> attributes become listeners; <code>true</code> sets an empty attribute; <code>false</code>/<code>null</code> are skipped; string children are text</div></div><div><div><code>slugify</code></div><div><code>slugify(text)</code></div><div>Lowercase, hyphenated id from a heading</div></div><div><div><code>escapeRegExp</code></div><div><code>escapeRegExp(text)</code></div><div>Escapes text for use inside a RegExp</div></div><div><div><code>safeUrl</code></div><div><code>safeUrl(url)</code></div><div>Returns the url when it is http(s) or relative, otherwise an empty string</div></div><div><div><code>prefersReducedMotion</code></div><div><code>prefersReducedMotion()</code></div><div>True for the OS setting or <code>data-motion="off"</code></div></div><div><div><code>readJSON</code>, <code>writeJSON</code></div><div><code>readJSON(key, fallback)</code></div><div>localStorage with JSON and no exceptions when storage is blocked</div></div><div><div><code>fetchIndex</code></div><div><code>await fetchIndex()</code></div><div>Pages from <code>/query-index.json</code> as <code>{path, title, desc}</code>; throws when unusable</div></div><div><div><code>createDialog</code>, <code>openDialog</code></div><div><code>createDialog(class, label)</code></div><div>Modal <code>dialog</code> that closes on backdrop click; focus returns to the opener</div></div><div><div><code>embedFrame</code></div><div><code>embedFrame(href, title)</code></div><div>iframe for YouTube or Vimeo links, <code>null</code> for any other host</div></div><div><div><code>readTheme</code>, <code>applyTheme</code>, <code>accentVars</code></div><div><code>applyTheme(state, pageTheme)</code></div><div>Validated theme choices applied to the html element</div></div></div>
+    <pre><code class="language-js">import { el, slugify, safeUrl } from '../../scripts/utils.js';
+
+const link = el('a', { href: safeUrl(userUrl) || '#' }, 'Read more');
+const id = slugify('Getting started'); // "getting-started"</code></pre>
+    <h2 id="auto-blocking-and-fragments">Auto-blocking and fragments</h2>
+    <p><code>buildAutoBlocks</code> in <code>scripts.js</code> adds structure the author did not write: the breadcrumb when the <code>breadcrumb</code> metadata is on, the docs layout for the docs and library templates, and any link to a <code>/fragments/</code> path, which is replaced by that fragment.</p>
+    <h3 id="the-ispage-guard">The isPage guard</h3>
+    <p>Fragments are loaded by calling <code>decorateMain</code> on a detached <code>main</code>. Without a guard, a fragment would read the page metadata and build its own breadcrumb or docs layout, and a docs page that includes a fragment would recurse. Page-level auto blocks therefore run only when the element is the real <code>document.querySelector('main')</code>.</p>
+    <pre><code class="language-js">import { loadFragment } from '../fragment/fragment.js';
+
+const fragment = await loadFragment('/fragments/promo'); // a main element, or null
+if (fragment) block.append(...fragment.children);</code></pre>
+    <h2 id="local-development">Local development</h2>
+    <ul><li><code>npm run dev</code> serves <code>drafts/</code> at <code>/</code> with your local code. <code>npx -y @adobe/aem-cli up</code> serves local code against previewed content.</li><li>Append <code>.plain.html</code> to any page URL to see the markup your block receives before any JavaScript runs.</li><li>Run <code>npx -y @adobe/aem-cli up --help</code> for flags such as the port or whether the browser opens.</li><li>Local demo pages write section styles as classes on the section <code>div</code>; real pages use Section Metadata.</li></ul>
+    <h3 id="linting">Linting</h3>
+    <pre><code class="language-bash">npm run lint        # eslint and stylelint
+npm run lint:fix    # apply safe fixes</code></pre>
+    <p>Keep lint clean before opening a pull request. A pull request also needs a preview link in the form <code>https://{branch}--{repo}--{owner}.aem.page/{path}</code>.</p>
+    <h2 id="troubleshooting">Troubleshooting</h2>
+    <div class="table"><div><div>Symptom</div><div>Likely cause</div><div>Fix</div></div><div><div>404 on <code>.aem.page</code> with "content bus not found"</div><div>The page was never previewed</div><div>Use Sidekick Preview or the preview call above</div></div><div><div>"Site not available in org"</div><div>Your account has no access to that org or site</div><div>Ask an admin to add you; check <code>$ORG</code> and <code>$SITE</code></div></div><div><div>401 from the Admin API</div><div>Missing or expired token</div><div>Sign in again and update <code>AEM_TOKEN</code></div></div><div><div>Search engines skip the page</div><div><code>aem.page</code> and <code>aem.live</code> send noindex</div><div>Expected; only your production domain is indexed</div></div><div><div>Old content still shows</div><div>CDN cache is stale</div><div>Publish again or purge the cache</div></div><div><div>Code change not live</div><div>Code sync did not run</div><div>Check the AEM Code Sync app, or sync the code by hand</div></div><div><div>Pasted table looks wrong in DA</div><div>Rich text paste brought extra markup</div><div>Paste as plain text, then rebuild the table with the editor</div></div></div>
+    <p>Still stuck? The <a href="https://www.aem.live/docs/">AEM documentation</a> has detailed guides for each service.</p>
   </div>
 </main>
 <footer></footer>

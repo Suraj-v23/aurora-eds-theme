@@ -42,6 +42,9 @@ Edit the variables at the top of [`styles/styles.css`](styles/styles.css):
 | `--night-color` | Hero, footer and dark section background |
 | `--radius`, `--shadow` | Card shape and depth |
 | `--body-font-family`, `--heading-font-family` | Fonts (system stack by default) |
+| `--heading-font-size-*`, `--body-font-size-*` | Fluid type scale |
+| `--space-1` to `--space-10`, `--section-pad`, `--gap` | Spacing scale and section rhythm |
+| `--code-*` | Code block colors |
 
 ## Blocks
 
@@ -81,7 +84,7 @@ Each block is a table in your document. The first row is the block name. See eve
 | **Timeline** | One per event | Date, then heading and text. Alternates sides on desktop. |
 | **Sidebar** | One | Cell 1: nav links (bold-only paragraph or heading + list = group; sticky, highlights current; collapses to a Menu button on mobile). Cell 2: content. Variants: `docs` (760px column), `toc` (adds "On this page"). |
 | **Animated Text** | Two | Row 1: text before. Row 2: list of words to cycle. |
-| **Feature Grid** | One per tile | Optional icon line, heading, text. First tile is larger. Variants: `wide`, `uniform`. |
+| **Feature Grid** | One per tile | Optional icon line (`:palette:`), heading, text. First tile is larger. Variants: `wide`, `uniform`. |
 
 **Media, data and developer blocks**
 
@@ -96,7 +99,7 @@ Each block is a table in your document. The first row is the block name. See eve
 | **Countdown** | One | Target date/time, label, optional finished text |
 | **Admin API** | Optional config rows | `org`, `site`, `ref`, `path`. Builds an Admin API curl command with a `$AEM_TOKEN` placeholder; never calls the API. |
 
-**From the boilerplate:** Fragment, Header, Footer. Fragment, Header, Footer.
+**From the boilerplate:** Fragment, Header, Footer.
 
 Buttons: make a link **bold** for a primary button, *italic* for a secondary button.
 
@@ -128,6 +131,13 @@ Add a **Section Metadata** table with a `Style` row. Combine with commas, for ex
 - **Customizer panel:** a "Customize" button at the bottom right ([`scripts/theme-panel.js`](scripts/theme-panel.js)) lets visitors pick preset, accent color, font and motion. Choices are saved in `localStorage`. Disable it on a page with page metadata `theme-panel` = `off`.
 - **Docs template:** set page metadata `template` = `docs`, `sidebar` = path of a nav fragment (for example `/drafts/docs-nav`: bold-only paragraphs as group labels, each followed by a list of links) and optionally `theme` = `docs`. The page gets a left navigation, a 760px content column and an "On this page" outline from its h2/h3. `theme` sets the default preset for visitors who have not chosen one. See `drafts/docs.html`.
 - **Default theme:** edit the `:root` tokens in `styles/styles.css` (they are the ember theme).
+
+## Documentation
+
+- **Theme guide** ([`drafts/docs.html`](drafts/docs.html), `/docs`): quick start, project structure, design tokens (type, spacing and code scales), presets, templates, section styles, icons, search and query index, performance and accessibility rules, deployment.
+- **Developer guide** ([`drafts/developer.html`](drafts/developer.html), `/developer`): Admin API recipes with copyable commands, building a block end to end, the `utils.js` reference, auto-blocking, fragments and troubleshooting.
+- **Docs features:** every code block gets a language label, a Copy button and light syntax highlighting ([`scripts/code.js`](scripts/code.js)); h2/h3 get hover anchors; previous/next links follow the order of the navigation fragment.
+- **Icons:** write `:palette:` (or any name in [`icons/`](icons/)) in a document. The icon is an SVG mask, so it takes the surrounding text color.
 
 ## Development
 

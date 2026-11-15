@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <title>Documentation: Aurora theme</title>
-  <meta name="description" content="Documentation-style page using the Aurora docs template: side navigation, readable column and an on-page table of contents.">
+  <meta name="description" content="Set up, theme and ship the Aurora theme for AEM Edge Delivery Services: tokens, presets, templates, icons, search and performance.">
   <meta name="template" content="docs">
   <meta name="theme" content="docs">
   <meta name="sidebar" content="/drafts/docs-nav">
@@ -20,33 +20,116 @@
 <main>
   <div>
     <h1 id="introduction">Introduction</h1>
-    <p>Aurora ships a calm documentation layout: a navigation column on the left, a readable content column and an "On this page" outline on the right. It is switched on with page metadata only, so authors never touch code.</p>
-    <div class="callout"><div><div><p><strong>Tip.</strong> Use the Customize button to switch between the light and dark docs presets.</p></div></div></div>
-    <h2 id="installation">Installation</h2>
-    <p>Copy the theme into your repository and keep the boilerplate tooling. There is no build step.</p>
-    <pre><code>git clone https://github.com/Suraj-v23/aurora-eds-theme
-cd aurora-eds-theme
-npm install
+    <p>Aurora is a theme for <a href="https://www.aem.live/">AEM Edge Delivery Services</a>. It is plain JavaScript and CSS on top of the official boilerplate, so there is nothing to compile and nothing to install at runtime. This guide covers how to set it up, restyle it and keep it fast. For Admin API recipes and block development, see the <a href="/developer">developer guide</a>.</p>
+    <div class="callout"><div><div><p><strong>Tip.</strong> Use the Customize button at the bottom right to try the light and dark docs presets on this page.</p></div></div></div>
+    <p>Anything Adobe-specific, such as services, configuration and limits, is covered in the <a href="https://www.aem.live/docs/">official documentation</a>. This guide only describes what the theme itself does.</p>
+    <h2 id="quick-start">Quick start</h2>
+    <p>Five steps take you from the template to a running local site.</p>
+    <ol><li>Open the repository on GitHub and choose <strong>Use this template</strong> to create your own copy.</li><li>Install the <a href="https://github.com/apps/aem-code-sync">AEM Code Sync</a> GitHub app on that repository so pushes reach Edge Delivery.</li><li>Connect a content source for your site. <a href="https://da.live/">DA</a>, Google Drive and SharePoint all work; the <a href="https://www.aem.live/docs/">documentation</a> walks through each one.</li><li>Install the dev dependencies (linting only).</li><li>Start the local server and open <code>http://localhost:3000</code>.</li></ol>
+    <pre><code class="language-bash">git clone https://github.com/&lt;your-org&gt;/&lt;your-repo&gt;.git
+cd &lt;your-repo&gt;
+npm i
 npm run dev</code></pre>
+    <p><code>npm run dev</code> serves the demo pages from <code>drafts/</code> together with your local code. To work against real previewed content instead, run the CLI without the folder options:</p>
+    <pre><code class="language-bash">npx -y @adobe/aem-cli up</code></pre>
     <h2 id="project-structure">Project structure</h2>
-    <p>Each block lives in its own folder with one JavaScript and one CSS file. Global tokens live at the top of <code>styles/styles.css</code>.</p>
-    <h3 id="page-metadata">Page metadata</h3>
-    <p>Three metadata rows turn any page into a docs page.</p>
-  </div>
-  <div>
-    <div class="table"><div><div>Name</div><div>Value</div><div>Purpose</div></div><div><div>template</div><div>docs</div><div>Enables the docs layout</div></div><div><div>sidebar</div><div>/drafts/docs-nav</div><div>Fragment with the navigation</div></div><div><div>theme</div><div>docs</div><div>Default preset when the visitor has no saved choice</div></div></div>
-  </div>
-  <div>
-    <h2 id="presets">Presets</h2>
-    <p>A preset only overrides CSS variables, so every block follows it automatically.</p>
-    <h3 id="docs-preset">Docs preset</h3>
-    <p>White background, soft grey surfaces, small radii, flat bordered cards and a quiet periwinkle accent.</p>
-    <h3 id="dark-variant">Dark variant</h3>
-    <p>The <code>docs-dark</code> preset keeps the same structure on a near-black background.</p>
-    <h2 id="fonts">Fonts</h2>
-    <p>The docs preset uses a clean system sans-serif for headings. Pick another style in the customizer if you prefer.</p>
-    <h2 id="customizer">Customizer</h2>
-    <p>Visitors can change theme, accent colour, text style and motion. Everything is stored in their browser. Add metadata <code>theme-panel</code> = <code>off</code> to hide it.</p>
+    <p>Each block is a folder with one JavaScript file and one CSS file named after it. Global tokens and base styles live in <code>styles/styles.css</code>.</p>
+    <pre><code class="language-text">blocks/            one folder per block: name/name.js and name/name.css
+  sidebar/         docs navigation, outline and page template
+  fragment/        shared content; the only block others may import
+icons/             24x24 SVG line icons used by :name: shortcodes
+scripts/
+  aem.js           vendored boilerplate runtime, never edit
+  scripts.js       page decoration, auto-blocking, loading order
+  utils.js         shared helpers: el, slugify, readJSON and more
+  code.js          code block header, highlighting, copy button
+  theme-panel.js   the Customize panel
+styles/            styles.css (tokens, type, sections), fonts, lazy, panel
+drafts/            local demo pages and nav fragments
+tools/             build-demo.sh builds the GitHub Pages copy
+head.html          scripts and stylesheet loaded on every page</code></pre>
+    <p>Everything committed is served publicly. Anything that should not be, such as notes or build scripts, belongs in <code>.hlxignore</code>.</p>
+    <h2 id="theming">Theming</h2>
+    <p>Every color, size and gap comes from a CSS variable declared in <code>:root</code>. Change a variable and every block follows.</p>
+    <h3 id="design-tokens">Design tokens</h3>
+    <div class="table"><div><div>Token</div><div>Default</div><div>Controls</div></div><div><div><code>--link-color</code></div><div>#e8743b</div><div>Links, primary buttons, highlights</div></div><div><div><code>--accent-color</code></div><div>#e8743b</div><div>Focus ring, check marks, icon tiles</div></div><div><div><code>--background-color</code>, <code>--surface-color</code>, <code>--light-color</code></div><div>dark ember tones</div><div>Page, raised card and alternate band backgrounds</div></div><div><div><code>--heading-font-size-xxl</code> to <code>-xs</code></div><div>fluid, 84px down to 17px</div><div>Heading scale: hero, h2, h3, block titles</div></div><div><div><code>--body-font-size-l</code> to <code>-xs</code></div><div>fluid, 21px down to 13px</div><div>Lead text, body, small and caption text</div></div><div><div><code>--line-height-heading</code>, <code>--line-height-body</code></div><div>1.15, 1.6</div><div>Line heights</div></div><div><div><code>--measure</code></div><div>68ch</div><div>Maximum paragraph width</div></div><div><div><code>--space-1</code> to <code>--space-10</code></div><div>4, 8, 12, 16, 24, 32, 48, 64, 96, 128px</div><div>Spacing scale for margins, padding and gaps</div></div><div><div><code>--section-pad</code></div><div>56px to 112px</div><div>Vertical padding of every section</div></div><div><div><code>--gutter</code>, <code>--container</code>, <code>--gap</code></div><div>16/32px, 1200px, 24px</div><div>Side gutters, content width, grid gap</div></div><div><div><code>--code-bg</code>, <code>--code-fg</code>, <code>--code-keyword</code>, <code>--code-string</code>, <code>--code-comment</code>, <code>--code-number</code>, <code>--code-tag</code></div><div>per preset</div><div>Code block colors</div></div><div><div><code>--radius</code>, <code>--shadow</code></div><div>16px, soft</div><div>Card shape and depth</div></div></div>
+    <h3 id="presets">Presets</h3>
+    <p>A preset is a set of variable overrides under <code>[data-theme="name"]</code>. Set <code>data-theme</code> on the <code>html</code> element or use the <code>theme</code> page metadata. Built in: <code>ember</code> (default), <code>light</code>, <code>midnight</code>, <code>forest</code>, <code>mono</code>, <code>docs</code> and <code>docs-dark</code>.</p>
+    <h3 id="fonts">Fonts</h3>
+    <p>No web fonts are downloaded. <code>data-font</code> switches between <code>classic</code>, <code>modern</code>, <code>mono</code>, <code>rounded</code> and <code>editorial</code>, each a different system font stack. Editorial also enlarges headings through <code>--heading-scale</code>.</p>
+    <h3 id="add-your-own-preset">Add your own preset</h3>
+    <p>Add a block to <code>styles/styles.css</code>, then register its name in <code>THEMES</code> in <code>scripts/utils.js</code> so the customizer lists it. Only override what changes.</p>
+    <pre><code class="language-css">[data-theme="ocean"] {
+  --background-color: #0b1a24;
+  --surface-color: #112431;
+  --light-color: #16303f;
+  --text-color: #e6f1f7;
+  --link-color: #38bdf8;
+  --accent-color: #38bdf8;
+  --on-accent: #04202e;
+  --border-color: #23455a;
+  --code-bg: #0a141b;
+}</code></pre>
+    <h3 id="customizer-panel">Customizer panel</h3>
+    <p>The Customize button lets visitors pick a preset, an accent color, a font style and whether motion is on. Choices are stored in <code>localStorage</code> and validated against allow-lists before use. Hide the button on a page with the page metadata <code>theme-panel</code> set to <code>off</code>.</p>
+    <h2 id="page-templates">Page templates</h2>
+    <p>Two templates add a navigation column and a readable content column. They are switched on with page metadata only.</p>
+    <div class="table"><div><div>Metadata</div><div>Example</div><div>Effect</div></div><div><div><code>template</code></div><div><code>docs</code> or <code>library</code></div><div>Enables the left navigation and the docs layout; <code>library</code> uses a wider column and no outline</div></div><div><div><code>sidebar</code></div><div><code>/drafts/docs-nav</code></div><div>Path of the navigation fragment</div></div><div><div><code>theme</code></div><div><code>docs</code></div><div>Default preset for visitors without a saved choice</div></div><div><div><code>breadcrumb</code></div><div><code>on</code></div><div>Adds a breadcrumb above the content</div></div><div><div><code>theme-panel</code></div><div><code>off</code></div><div>Hides the Customize button</div></div></div>
+    <p>The navigation fragment is a list of links. A bold-only paragraph before a list becomes a group label. The template also builds an "On this page" outline from your h2 and h3 headings, adds hover anchors to them and appends previous and next links based on the order of page links in the navigation.</p>
+    <h2 id="section-styles-and-animations">Section styles and animations</h2>
+    <p>Add a Section Metadata table to a section with a <code>Style</code> row. Combine styles with commas.</p>
+    <pre><code class="language-markdown">| Section Metadata |            |
+| ---------------- | ---------- |
+| Style            | dark, center |</code></pre>
+    <div class="table"><div><div>Style</div><div>Effect</div></div><div><div><code>center</code></div><div>Centered text with a narrower intro</div></div><div><div><code>narrow</code></div><div>800px content width</div></div><div><div><code>light</code>, <code>dark</code></div><div>Soft grey or deep dark band; blocks inside adapt</div></div><div><div><code>cta</code></div><div>Gradient call-to-action band</div></div><div><div><code>fade-up</code>, <code>zoom</code>, <code>slide-left</code>, <code>slide-right</code>, <code>stagger</code></div><div>Scroll animation, off for reduced motion</div></div></div>
+    <p>Spacing between sections comes from <code>--section-pad</code>. Two neighbouring sections without a background share a single gap, and so do two with the same background.</p>
+    <h2 id="icons">Icons</h2>
+    <p>Write an icon name between colons in your document, for example <code>:rocket:</code>. Edge Delivery turns it into a span, and the theme loads <code>/icons/rocket.svg</code> and uses it as a mask, so the icon takes the color of the text around it. In the feature grid it sits in a tinted tile.</p>
+    <p>Included icons: palette, contrast, type, zap, layers, shield, code, search, layout, sparkles, rocket, book, terminal, copy, check, gauge, globe and puzzle.</p>
+    <h3 id="add-your-own">Add your own</h3>
+    <p>Drop a 24x24 SVG into <code>icons/</code>. Use <code>stroke="currentColor"</code> and no fixed fill colors so it follows the theme.</p>
+    <pre><code class="language-html">&lt;svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"&gt;
+  &lt;circle cx="12" cy="12" r="9"/&gt;&lt;path d="m8 12 3 3 5-6"/&gt;
+&lt;/svg&gt;</code></pre>
+    <h2 id="search">Search</h2>
+    <p>The header search button (also <code>/</code> or Ctrl/Cmd+K) opens a dialog with live results. It first reads <code>/query-index.json</code>. If the site has no index it crawls the pages linked from the nav and docs fragments, which is how the demo works without any setup.</p>
+    <h3 id="add-a-query-index">Add a query index</h3>
+    <p>A query index lists every page with its title and description. Define it in a <code>query.yaml</code> file and upload it with the config service. See the <a href="https://www.aem.live/docs/">indexing documentation</a> for all options and the exact endpoint for your project.</p>
+    <pre><code class="language-yaml">version: 1
+indices:
+  site:
+    include:
+      - /**
+    exclude:
+      - /drafts/**
+      - /**/fragments/**
+    target: /query-index.json
+    properties:
+      title:
+        select: head &gt; meta[property="og:title"]
+        value: attribute(el, "content")
+      description:
+        select: head &gt; meta[name="description"]
+        value: attribute(el, "content")</code></pre>
+    <pre><code class="language-bash">curl -X POST \
+  "https://admin.hlx.page/config/$ORG/sites/$SITE/content/query.yaml" \
+  -H "x-auth-token: $AEM_TOKEN" \
+  -H "content-type: text/yaml" \
+  --data-binary @query.yaml</code></pre>
+    <div class="callout warning"><div><div><p><strong>Keep tokens out of files.</strong> <code>$AEM_TOKEN</code> is an environment variable. Never paste a real token into a document, commit or chat.</p></div></div></div>
+    <h2 id="performance-rules">Performance rules</h2>
+    <p>The theme is built to score well on Lighthouse out of the box. Keep it that way:</p>
+    <ul><li>Keep the largest image or heading in the first section. It is the LCP element, so never lazy-load it.</li><li>Load blocks only on pages that use them. Each block is its own file; avoid importing one block from another.</li><li>Stay on system fonts. If you add a web font, load it from <code>fonts.css</code> after first paint and use <code>font-display: swap</code>.</li><li>Put anything non-essential, such as analytics, in <code>delayed</code> loading rather than eager.</li><li>Reserve space for images with <code>width</code> and <code>height</code> to avoid layout shift.</li><li>Keep total JavaScript small: no framework, no build step.</li></ul>
+    <h2 id="accessibility-checklist">Accessibility checklist</h2>
+    <ul><li>One h1 per page and headings in order, never skipped for size.</li><li>Links inside paragraphs are underlined; navigation links are not. Do not rely on color alone for running text.</li><li>Every informative image has alt text; decorative images use empty alt.</li><li>Check contrast of any custom accent against the background; the customizer chooses dark or light text for you.</li><li>Every control works with the keyboard and shows a visible focus ring.</li><li>Motion respects the reduced-motion setting.</li><li>Buttons are real buttons or links, with a text label or <code>aria-label</code>.</li></ul>
+    <h2 id="deploying-the-demo">Deploying the demo</h2>
+    <p>The demo is a static copy of <code>drafts/</code> built by <code>tools/build-demo.sh</code>. The GitHub Actions workflow in <code>.github/workflows/pages.yaml</code> runs it on every push to <code>main</code> and publishes the result to GitHub Pages. To build it yourself:</p>
+    <pre><code class="language-bash">sh tools/build-demo.sh /your-repo-name
+# open _site/index.html through any static server</code></pre>
+    <p>A real project is served by Edge Delivery, not by this script.</p>
+    <h3 id="go-live-on-your-domain">Go live on your domain</h3>
+    <p>On a production site your content is previewed on <code>aem.page</code> and published to <code>aem.live</code>. To serve it from your own domain, configure the production host for the site and point your DNS at the CDN as described in the <a href="https://www.aem.live/docs/">go-live documentation</a>. Merging to <code>main</code> ships code; content is published separately.</p>
   </div>
 </main>
 <footer></footer>

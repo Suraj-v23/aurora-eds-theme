@@ -148,8 +148,18 @@
     <p>Row 1: text before. Row 2: a list of words, cycled every 2.5 seconds. Screen readers get every word; reduced motion shows the first.</p>
     <div class="animated-text"><div><div>We build</div></div><div><div><ul><li>fast sites</li><li>bold sites</li><li>accessible sites</li></ul></div></div></div>
     <h2 id="feature-grid">Feature grid</h2>
-    <p>One row per tile: optional icon line (a symbol or :icon:), heading, text. First tile is larger. Variants: Feature Grid (wide), Feature Grid (uniform).</p>
-    <div class="feature-grid"><div><div><p>✦</p><h3>Large first tile</h3><p>It spans two columns and two rows on desktop.</p></div></div><div><div><p>⚡</p><h3>Fast</h3><p>Hover for the glow.</p></div></div><div><div><p>◐</p><h3>Themed</h3><p>Follows the active preset.</p></div></div><div><div><p>♿</p><h3>Accessible</h3><p>Plain semantic markup.</p></div></div></div>
+    <p>One row per tile: optional icon line (write <code>:palette:</code>, <code>:zap:</code> and so on), heading, text. First tile is larger. Variants: Feature Grid (wide), Feature Grid (uniform).</p>
+    <div class="feature-grid"><div><div><p><span class="icon icon-sparkles"></span></p><h3>Large first tile</h3><p>It spans two columns and two rows on desktop.</p></div></div><div><div><p><span class="icon icon-zap"></span></p><h3>Fast</h3><p>Hover for the glow.</p></div></div><div><div><p><span class="icon icon-palette"></span></p><h3>Themed</h3><p>Follows the active preset.</p></div></div><div><div><p><span class="icon icon-shield"></span></p><h3>Accessible</h3><p>Plain semantic markup.</p></div></div></div>
+    <h2 id="icons">Icons</h2>
+    <p>Write <code>:name:</code> in any paragraph to place an SVG line icon from <code>/icons</code>. Icons take the color of the surrounding text. Available: palette, contrast, type, zap, layers, shield, code, search, layout, sparkles, rocket, book, terminal, copy, check, gauge, globe, puzzle.</p>
+    <p><span class="icon icon-rocket"></span> Launch <span class="icon icon-gauge"></span> Measure <span class="icon icon-globe"></span> Reach <span class="icon icon-puzzle"></span> Extend</p>
+    <h2 id="code-blocks">Code blocks</h2>
+    <p>Every code block gets a header with the language and a Copy button, plus light syntax highlighting for JavaScript, CSS, HTML, bash, JSON and YAML.</p>
+    <pre><code class="language-js">// copy me
+const theme = { accent: '#e8743b', dark: true };
+export default function decorate(block) {
+  block.classList.add('ready');
+}</code></pre>
     <h2 id="sidebar">Sidebar</h2>
     <p>One row, two cells. Cell 1: a list of #links to headings (sticky, highlights the current one). Cell 2: content. Hand-written HTML in cell 2 can nest blocks with data-nested.</p>
     <p>The navigation on the left is this block. On mobile it collapses behind a Menu button. Variants: Sidebar (docs) caps the content at a readable width, Sidebar (toc) adds an "On this page" outline built from h2 and h3. In the nav, a bold-only paragraph or heading followed by a list becomes a group. For a whole page, see the <a href="/docs">docs template</a>.</p>

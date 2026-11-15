@@ -13,6 +13,7 @@ import {
   buildBlock,
 } from './aem.js';
 import { applyTheme, readTheme, prefersReducedMotion } from './utils.js';
+import decorateCodeBlocks from './code.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -135,6 +136,17 @@ function decorateButtons(main) {
 }
 
 /**
+ * Turns icon images into CSS masks so icons take the surrounding text color.
+ * @param {Element} main The main element
+ */
+function maskIcons(main) {
+  main.querySelectorAll('span.icon > img').forEach((img) => {
+    img.parentElement.style.setProperty('--icon', `url(${img.src})`);
+    img.parentElement.classList.add('masked');
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -146,10 +158,12 @@ export function decorateMain(main) {
     if (p.textContent.trim() === em.textContent.trim() && !em.querySelector('a')
       && /^H[1-6]$/.test(p.nextElementSibling?.tagName || '')) p.classList.add('eyebrow');
   });
-  decorateIcons(main);
   buildAutoBlocks(main);
   decorateSections(main);
   decorateBlocks(main);
+  decorateCodeBlocks(main); // after sections: the wrapper div must not split default content
+  decorateIcons(main);
+  maskIcons(main);
   decorateButtons(main);
 }
 

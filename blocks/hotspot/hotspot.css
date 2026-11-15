@@ -1,6 +1,5 @@
 /* Hotspot: pins over an image with popovers. */
 .hotspot-stage {
-  margin-top: 16px;
   position: relative;
   line-height: 0;
 }

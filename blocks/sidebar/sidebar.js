@@ -78,6 +78,28 @@ export function buildToc(root) {
   return nav;
 }
 
+/** Hover "#" links on h2/h3 of the content (ids are added when missing). */
+function addAnchors(main) {
+  main.querySelectorAll('.default-content-wrapper :is(h2, h3)').forEach((h) => {
+    if (!h.id) h.id = slugify(h.textContent.trim());
+    h.append(el('a', { class: 'docs-anchor', href: `#${h.id}`, 'aria-label': `Link to section ${h.textContent.trim()}` }, '#'));
+  });
+}
+
+/** Previous / next links from the page links of the nav, in nav order. */
+function addPager(main, nav) {
+  const pages = [];
+  nav.querySelectorAll('a[href]').forEach((a) => {
+    if (!a.hash && !pages.some((p) => trim(p.pathname) === trim(a.pathname))) pages.push(a);
+  });
+  const i = pages.findIndex((a) => trim(a.pathname) === trim(window.location.pathname));
+  const link = (a, cls, label) => a && el('a', { href: a.getAttribute('href'), class: cls }, el('small', null, label), a.textContent.trim());
+  const [prev, next] = [pages[i - 1], pages[i + 1]];
+  const last = main.querySelector(':scope > .section:last-of-type');
+  if (i < 0 || !last || (!prev && !next)) return;
+  last.append(el('div', { class: 'default-content-wrapper' }, el('nav', { class: 'docs-pager', 'aria-label': 'Previous and next pages' }, link(prev, 'prev', 'Previous'), link(next, 'next', 'Next'))));
+}
+
 /** Page-level docs layout: nav fragment on the left, content, TOC on the right. */
 export async function docsLayout(main, path) {
   try {
@@ -93,6 +115,7 @@ export async function docsLayout(main, path) {
     aside.append(nav);
     main.prepend(aside);
     enhanceNav(nav);
+    addPager(main, nav);
     const toc = !main.classList.contains('docs-wide') && buildToc(main);
     if (toc) {
       const right = document.createElement('aside');
@@ -100,6 +123,7 @@ export async function docsLayout(main, path) {
       right.append(toc);
       main.append(right);
     }
+    addAnchors(main);
   } catch (e) {
     main.classList.remove('docs-layout');
   }

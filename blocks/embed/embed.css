@@ -1,6 +1,5 @@
 .embed {
   aspect-ratio: 16 / 9;
-  margin-top: 24px;
   border-radius: var(--radius);
   background: var(--night-color);
   overflow: hidden;

@@ -182,7 +182,7 @@
 }
 
 .sidebar .sidebar-content h2 {
-  margin-top: 64px;
+  margin-top: var(--space-8);
 }
 
 .sidebar .sidebar-content > :first-child {
@@ -202,11 +202,93 @@ main.docs-layout {
 }
 
 main.docs-layout > .section {
-  margin: 48px 0;
+  padding-block: var(--space-7);
+}
+
+/* docs rhythm: h2 sections about 56px apart, h3 about 32px, smaller sizes than landing pages */
+main.docs-layout h1 {
+  font-size: calc(var(--heading-font-size-xl) * var(--heading-scale));
+}
+
+main.docs-layout .default-content-wrapper h2 {
+  margin-top: var(--space-8);
+  padding-top: var(--space-6);
+  border-top: 1px solid var(--border-color);
+  font-size: calc(var(--heading-font-size-l) * var(--heading-scale));
+}
+
+main.docs-layout .default-content-wrapper h3 {
+  margin-top: var(--space-6);
+  font-size: var(--heading-font-size-m);
+}
+
+main.docs-layout .default-content-wrapper > :first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+main.docs-layout .default-content-wrapper > :is(p, ul, ol, dl) {
+  max-width: none;
+}
+
+main.docs-layout .default-content-wrapper > :is(h2, h3) + :is(h3) {
+  margin-top: var(--space-4);
+}
+
+/* heading anchor: a "#" link that appears on hover or focus */
+.docs-anchor:any-link {
+  margin-left: 0.4em;
+  color: var(--dark-color);
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity var(--duration-fast);
+}
+
+:is(h2, h3):hover .docs-anchor,
+.docs-anchor:focus-visible {
+  opacity: 1;
+}
+
+/* previous / next page links */
+.docs-pager {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  margin-top: var(--space-6);
+}
+
+.docs-pager a:any-link {
+  display: block;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-m);
+  padding: var(--space-3) var(--space-4);
+  color: var(--text-color);
+  font-weight: 600;
+}
+
+.docs-pager a:hover {
+  border-color: var(--accent-color);
+  text-decoration: none;
+}
+
+.docs-pager small {
+  display: block;
+  color: var(--dark-color);
+  font-size: var(--body-font-size-xs);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.docs-pager .next {
+  grid-column: 2;
+  text-align: right;
 }
 
 main.docs-layout > .section > div {
   max-width: 760px;
+  padding-inline: var(--gutter);
 }
 
 main.docs-wide > .section > div {

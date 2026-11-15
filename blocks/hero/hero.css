@@ -6,7 +6,7 @@
 .hero {
   position: relative;
   isolation: isolate;
-  padding: 96px 24px;
+  padding: var(--section-pad) var(--gutter);
   background: var(--hero-glow, radial-gradient(55% 75% at 85% 0%, color-mix(in srgb, var(--accent-3) 35%, transparent), transparent 60%), radial-gradient(50% 70% at 8% 12%, color-mix(in srgb, var(--accent-color) 45%, transparent), transparent 62%), radial-gradient(40% 60% at 50% 110%, color-mix(in srgb, var(--accent-2) 30%, transparent), transparent 60%)), var(--hero-bg, var(--night-color));
   color: var(--hero-fg, var(--on-media));
   text-align: center;
@@ -34,8 +34,8 @@
 
 .hero h1 {
   margin-top: 0.3em;
-  font-size: clamp(42px, 7.2vw, 84px);
-  line-height: 1.04;
+  font-size: var(--heading-font-size-xxl);
+  line-height: 1.05;
 }
 
 /* italic words in the heading get the gradient */
