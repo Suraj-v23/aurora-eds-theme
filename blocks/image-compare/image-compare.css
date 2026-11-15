@@ -34,7 +34,7 @@
   width: 3px;
   margin-left: -1.5px;
   background: var(--on-accent);
-  box-shadow: 0 0 0 1px rgb(0 0 0 / 30%);
+  box-shadow: 0 0 0 1px rgb(var(--shade-rgb) / 30%);
   pointer-events: none;
 }
 

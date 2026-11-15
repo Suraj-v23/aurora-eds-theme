@@ -1,4 +1,8 @@
 /* Gallery: images become grid thumbnails; click opens a lightbox dialog (alt = caption). */
+import {
+  el, createDialog, openDialog,
+} from '../../scripts/utils.js';
+
 let dialog;
 let items = [];
 let at = 0;
@@ -12,27 +16,20 @@ function show(n) {
 }
 
 function build() {
-  dialog = document.createElement('dialog');
-  dialog.className = 'gallery-lightbox';
-  dialog.setAttribute('aria-label', 'Image viewer');
-  dialog.innerHTML = '<figure><img alt=""><figcaption></figcaption></figure>';
+  dialog = createDialog('gallery-lightbox', 'Image viewer');
+  dialog.append(el('figure', null, el('img', { alt: '' }), el('figcaption')));
   [['close', 'Close', '×'], ['prev', 'Previous image', '‹'], ['next', 'Next image', '›']].forEach(([c, label, ch]) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = `gallery-btn gallery-${c}`;
-    b.setAttribute('aria-label', label);
-    b.textContent = ch;
-    b.addEventListener('click', () => {
-      if (c === 'close') dialog.close();
-      else show(at + (c === 'next' ? 1 : -1));
-    });
-    dialog.append(b);
+    dialog.append(el('button', {
+      type: 'button',
+      class: `gallery-btn gallery-${c}`,
+      'aria-label': label,
+      onclick: () => (c === 'close' ? dialog.close() : show(at + (c === 'next' ? 1 : -1))),
+    }, ch));
   });
   dialog.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') show(at + 1);
     if (e.key === 'ArrowLeft') show(at - 1);
   });
-  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
   document.body.append(dialog);
 }
 
@@ -41,21 +38,18 @@ export default function decorate(block) {
   const list = document.createElement('ul');
   const own = imgs.map((img) => ({ src: img.currentSrc || img.src, alt: img.alt }));
   imgs.forEach((img, i) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.setAttribute('aria-haspopup', 'dialog');
-    btn.setAttribute('aria-label', img.alt ? `Enlarge: ${img.alt}` : `Enlarge image ${i + 1}`);
-    btn.append(img.closest('picture') || img);
+    const btn = el('button', {
+      type: 'button',
+      'aria-haspopup': 'dialog',
+      'aria-label': img.alt ? `Enlarge: ${img.alt}` : `Enlarge image ${i + 1}`,
+    }, img.closest('picture') || img);
     btn.addEventListener('click', () => {
       if (!dialog) build();
       items = own;
       show(i);
-      dialog.showModal();
-      dialog.addEventListener('close', () => btn.focus(), { once: true });
+      openDialog(dialog, btn);
     });
-    const li = document.createElement('li');
-    li.append(btn);
-    list.append(li);
+    list.append(el('li', null, btn));
   });
   block.replaceChildren(list);
 }

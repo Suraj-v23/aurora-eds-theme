@@ -37,9 +37,9 @@
   height: 72px;
   border-radius: 50%;
   background: var(--link-color);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 45%);
+  box-shadow: 0 8px 24px rgb(var(--shade-rgb) / 45%);
   transform: translate(-50%, -50%);
-  transition: transform 0.15s;
+  transition: transform var(--duration-fast);
 }
 
 .video .video-icon::after {

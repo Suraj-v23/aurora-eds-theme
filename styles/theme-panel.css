@@ -2,21 +2,21 @@
   position: fixed;
   right: 20px;
   bottom: 20px;
-  z-index: 50;
+  z-index: var(--z-fab);
   display: flex;
   align-items: center;
   gap: 8px;
   height: 48px;
   border: 0;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   padding: 0 14px;
   background: var(--accent-color);
   color: var(--on-accent);
-  box-shadow: 0 6px 24px rgb(0 0 0 / 28%);
+  box-shadow: var(--shadow-sm);
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform var(--duration);
 }
 
 .theme-panel-toggle:hover {
@@ -51,7 +51,7 @@
   padding: 0;
   background: var(--surface-color);
   color: var(--text-color);
-  box-shadow: -24px 0 64px rgb(0 0 0 / 25%);
+  box-shadow: -24px 0 64px rgb(var(--shade-rgb) / 25%);
   font-family: var(--body-font-family);
   font-size: 15px;
   line-height: 1.4;
@@ -63,7 +63,7 @@
 }
 
 .theme-panel[open]::backdrop {
-  background: rgb(0 0 0 / 35%);
+  background: var(--overlay-light);
   backdrop-filter: blur(4px);
   animation: tp-fade 0.28s ease;
 }
@@ -144,12 +144,12 @@
 .tp-theme {
   position: relative;
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px;
   background: var(--background-color);
   color: var(--text-color);
   text-align: left;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition: border-color var(--duration-fast), box-shadow var(--duration-fast);
 }
 
 .tp-theme:hover {
@@ -211,7 +211,7 @@
   color: var(--accent-color);
   opacity: 0;
   transform: scale(0.6);
-  transition: 0.15s;
+  transition: var(--duration-fast);
 }
 
 .tp-theme[aria-pressed="true"] .tp-check {
@@ -238,7 +238,7 @@
   padding: 0;
   background: var(--c);
   box-shadow: 0 0 0 1px var(--border-strong, var(--border-color));
-  transition: transform 0.15s;
+  transition: transform var(--duration-fast);
 }
 
 .tp-sw:hover {
@@ -341,10 +341,10 @@
   width: 44px;
   height: 26px;
   border: 0;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   padding: 0;
   background: var(--border-strong, var(--dark-color));
-  transition: background-color 0.2s;
+  transition: background-color var(--duration);
 }
 
 .tp-switch::after {
@@ -355,9 +355,9 @@
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 30%);
-  transition: transform 0.2s;
+  background: var(--on-media);
+  box-shadow: 0 1px 3px rgb(var(--shade-rgb) / 30%);
+  transition: transform var(--duration);
 }
 
 .tp-switch[aria-checked="true"] {

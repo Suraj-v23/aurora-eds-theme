@@ -1,6 +1,14 @@
 /* Form: rows = Label | Type (text, email, textarea, select, checkbox) | Required | Options.
    Last row: submit | Button label | https://endpoint. Without an endpoint it only shows a demo message. */
-const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+import { slugify as slug } from '../../scripts/utils.js';
+
+/** Submit target: https (or same-origin) only; null otherwise. */
+function endpointUrl(raw) {
+  try {
+    const u = new URL(raw, window.location.href);
+    return u.protocol === 'https:' || u.origin === window.location.origin ? u : null;
+  } catch { return null; }
+}
 
 export default function decorate(block) {
   const form = document.createElement('form');
@@ -79,7 +87,15 @@ export default function decorate(block) {
     if (submit.endpoint) {
       btn.disabled = true;
       try {
-        const resp = await fetch(submit.endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+        const url = endpointUrl(submit.endpoint);
+        if (!url) throw new Error('endpoint must be https');
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+          credentials: url.origin === window.location.origin ? 'same-origin' : 'omit',
+          referrerPolicy: 'strict-origin-when-cross-origin',
+        });
         if (!resp.ok) throw new Error(resp.status);
       } catch (err) {
         btn.disabled = false;

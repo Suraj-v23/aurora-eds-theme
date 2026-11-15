@@ -3,18 +3,18 @@
   margin: 24px 0;
   border: 1px solid var(--border-color);
   border-left: 5px solid var(--link-color);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px 22px;
   background-color: var(--light-color);
   text-align: left;
 }
 
 .callout.success {
-  border-left-color: #16a34a;
+  border-left-color: var(--success-color);
 }
 
 .callout.warning {
-  border-left-color: #d97706;
+  border-left-color: var(--warning-color);
 }
 
 .callout p {

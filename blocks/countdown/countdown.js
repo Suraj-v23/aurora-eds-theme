@@ -1,3 +1,5 @@
+import { el } from '../../scripts/utils.js';
+
 /* Countdown: cell 1 = target date/time (e.g. 2030-01-01 09:00), cell 2 = label,
    cell 3 (optional) = text shown when finished. */
 export default function decorate(block) {
@@ -7,10 +9,12 @@ export default function decorate(block) {
   const label = labelCell?.textContent.trim() || '';
   const done = doneCell?.textContent.trim() || 'It has started!';
   const units = ['days', 'hours', 'minutes', 'seconds'];
-  block.innerHTML = `<p class="countdown-label"></p><div class="countdown-grid" role="timer" aria-label="Time remaining">${
-    units.map((u) => `<div><strong data-u="${u}">0</strong><span>${u}</span></div>`).join('')}</div>`;
-  block.querySelector('.countdown-label').textContent = label;
-  const grid = block.querySelector('.countdown-grid');
+  const grid = el(
+    'div',
+    { class: 'countdown-grid', role: 'timer', 'aria-label': 'Time remaining' },
+    units.map((u) => el('div', null, el('strong', { 'data-u': u }, '0'), el('span', null, u))),
+  );
+  block.replaceChildren(el('p', { class: 'countdown-label' }, label), grid);
   let timer;
   const tick = () => {
     const left = Math.max(0, Math.floor((target - Date.now()) / 1000));

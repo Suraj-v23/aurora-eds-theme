@@ -28,7 +28,7 @@
 }
 
 .form .form-error {
-  color: #ef4444;
+  color: var(--danger-text);
   font-size: 14px;
 }
 
@@ -43,7 +43,7 @@
 }
 
 .form [aria-invalid="true"] {
-  border-color: #dc2626;
+  border-color: var(--danger-color);
 }
 
 .form .form-error:empty {
@@ -60,9 +60,9 @@
 }
 
 .form .form-status.ok {
-  color: #16a34a;
+  color: var(--success-color);
 }
 
 .form .form-status.error {
-  color: #ef4444;
+  color: var(--danger-text);
 }

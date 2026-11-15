@@ -13,7 +13,7 @@
   border-radius: var(--radius);
   background-color: var(--surface-color);
   overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform var(--duration), box-shadow var(--duration);
 }
 
 .cards > ul > li:hover {

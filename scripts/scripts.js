@@ -12,6 +12,7 @@ import {
   getMetadata,
   buildBlock,
 } from './aem.js';
+import { applyTheme, readTheme, prefersReducedMotion } from './utils.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
   const innerTT = window.trustedTypes.createPolicy('tt-inner', {
@@ -158,15 +159,7 @@ export function decorateMain(main) {
  */
 async function loadEager(doc) {
   document.documentElement.lang = 'en';
-  try { // apply saved theme choices before first paint
-    const root = document.documentElement;
-    if (getMetadata('theme')) root.dataset.theme = getMetadata('theme'); // page default
-    const saved = JSON.parse(localStorage.getItem('aurora-theme'));
-    ['theme', 'font', 'motion'].forEach((k) => { if (saved[k]) root.dataset[k] = saved[k]; });
-    Object.entries(saved.vars || {}).forEach(([k, v]) => root.style.setProperty(k, v));
-  } catch (e) {
-    // no saved theme
-  }
+  applyTheme(readTheme(), getMetadata('theme')); // saved theme choices (validated) before first paint
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
@@ -196,8 +189,7 @@ async function loadEager(doc) {
  * @param {Element} main The main element
  */
 function revealOnScroll(main) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    || document.documentElement.dataset.motion === 'off') return;
+  if (prefersReducedMotion()) return;
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (!entry.isIntersecting) return;

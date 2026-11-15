@@ -101,7 +101,7 @@
   gap: 8px;
   margin-bottom: 8px;
   border: 1px solid var(--border-strong, var(--border-color));
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   background: var(--surface-color);
   color: var(--text-color);
@@ -117,7 +117,7 @@
   border: solid currentcolor;
   border-width: 0 2px 2px 0;
   transform: rotate(45deg) translate(-2px, -2px);
-  transition: transform 0.2s;
+  transition: transform var(--duration);
 }
 
 .docs-menu-toggle[aria-expanded="true"]::after {

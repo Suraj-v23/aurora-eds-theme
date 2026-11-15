@@ -1,4 +1,5 @@
 import { decorateBlock, loadBlock } from '../../scripts/aem.js';
+import { el, slugify } from '../../scripts/utils.js';
 
 const trim = (p) => p.replace(/\/(index(\.html)?)?$/, '') || '/';
 
@@ -7,8 +8,8 @@ function spy(links) {
   const targets = new Map();
   links.forEach((a) => {
     if (trim(a.pathname) !== trim(window.location.pathname)) return;
-    const el = document.getElementById(decodeURIComponent(a.hash.slice(1)));
-    if (el) targets.set(el, a);
+    const t = document.getElementById(decodeURIComponent(a.hash.slice(1)));
+    if (t) targets.set(t, a);
   });
   if (!targets.size) return;
   let active;
@@ -20,16 +21,15 @@ function spy(links) {
     link.setAttribute('aria-current', 'true');
     active = link;
   }, { rootMargin: '0px 0px -75% 0px' });
-  targets.forEach((_, el) => observer.observe(el));
+  targets.forEach((_, t) => observer.observe(t));
 }
 
 /** Filter box: hides links that don't match, Enter opens the first match. */
 function addSearch(nav) {
-  const wrap = document.createElement('div');
-  wrap.className = 'docs-search';
-  wrap.innerHTML = '<input type="search" placeholder="Search" aria-label="Search the menu" autocomplete="off"><p class="docs-empty" hidden>No matches</p>';
-  const input = wrap.querySelector('input');
-  const empty = wrap.querySelector('.docs-empty');
+  const input = el('input', {
+    type: 'search', placeholder: 'Search', 'aria-label': 'Search the menu', autocomplete: 'off',
+  });
+  const empty = el('p', { class: 'docs-empty', hidden: true }, 'No matches');
   const items = [...nav.querySelectorAll('li')];
   const filter = () => {
     const q = input.value.trim().toLowerCase();
@@ -45,27 +45,24 @@ function addSearch(nav) {
     if (e.key === 'Enter') nav.querySelector('li:not([hidden]) a')?.click();
     if (e.key === 'Escape') { input.value = ''; filter(); }
   });
-  nav.prepend(wrap);
+  nav.prepend(el('div', { class: 'docs-search' }, input, empty));
 }
 
 /** Groups (heading or bold-only paragraph + list), current page, spy and mobile menu toggle. */
 export function enhanceNav(nav) {
   nav.classList.add('docs-nav');
-  [...nav.children].forEach((el) => {
-    const strong = el.tagName === 'P' && el.children.length === 1 && el.firstElementChild.tagName === 'STRONG';
-    if (/^H[1-6]$/.test(el.tagName) || (strong && !el.querySelector('a'))) el.classList.add('docs-label');
+  [...nav.children].forEach((c) => {
+    const strong = c.tagName === 'P' && c.children.length === 1 && c.firstElementChild.tagName === 'STRONG';
+    if (/^H[1-6]$/.test(c.tagName) || (strong && !c.querySelector('a'))) c.classList.add('docs-label');
   });
   nav.querySelectorAll('a[href]').forEach((a) => {
     if (!a.hash && trim(a.pathname) === trim(window.location.pathname)) a.setAttribute('aria-current', 'page');
   });
   spy([...nav.querySelectorAll('a[href*="#"]')]);
   addSearch(nav);
-  const toggle = document.createElement('button');
-  toggle.type = 'button';
-  toggle.className = 'docs-menu-toggle';
-  toggle.setAttribute('aria-expanded', 'false');
-  toggle.textContent = 'Menu';
-  toggle.addEventListener('click', () => toggle.setAttribute('aria-expanded', toggle.getAttribute('aria-expanded') !== 'true'));
+  const toggle = el('button', {
+    type: 'button', class: 'docs-menu-toggle', 'aria-expanded': 'false', onclick: () => toggle.setAttribute('aria-expanded', toggle.getAttribute('aria-expanded') !== 'true'),
+  }, 'Menu');
   nav.before(toggle);
 }
 
@@ -73,20 +70,10 @@ export function enhanceNav(nav) {
 export function buildToc(root) {
   const heads = [...root.querySelectorAll('.default-content-wrapper :is(h2, h3), :scope > :is(h2, h3)')];
   if (heads.length < 2) return null;
-  const nav = document.createElement('nav');
-  nav.className = 'docs-toc';
-  nav.setAttribute('aria-label', 'On this page');
-  nav.innerHTML = '<p>On this page</p><ul></ul>';
-  heads.forEach((h) => {
-    if (!h.id) h.id = h.textContent.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const li = document.createElement('li');
-    li.className = h.tagName.toLowerCase();
-    const a = document.createElement('a');
-    a.href = `#${h.id}`;
-    a.textContent = h.textContent;
-    li.append(a);
-    nav.lastElementChild.append(li);
-  });
+  const nav = el('nav', { class: 'docs-toc', 'aria-label': 'On this page' }, el('p', null, 'On this page'), el('ul', null, heads.map((h) => {
+    if (!h.id) h.id = slugify(h.textContent.trim());
+    return el('li', { class: h.tagName.toLowerCase() }, el('a', { href: `#${h.id}` }, h.textContent));
+  })));
   spy([...nav.querySelectorAll('a')]);
   return nav;
 }
@@ -128,10 +115,10 @@ export default function decorate(block) {
   nav.append(...navCell.childNodes);
   content.className = 'sidebar-content';
   block.replaceChildren(nav, content);
-  content.querySelectorAll('[data-nested]').forEach((el) => {
-    el.className = el.dataset.nested;
-    decorateBlock(el);
-    loadBlock(el);
+  content.querySelectorAll('[data-nested]').forEach((n) => {
+    n.className = n.dataset.nested;
+    decorateBlock(n);
+    loadBlock(n);
   });
   enhanceNav(nav);
   if (block.classList.contains('toc')) {

@@ -1,5 +1,7 @@
 /* Admin API helper: builds a curl command only. It never calls the API and never takes a token.
    Optional rows: org | name, site | name, ref | main, path | /. */
+import { el } from '../../scripts/utils.js';
+
 const HOST = 'https://admin.hlx.page';
 const ROLES = ['admin', 'author', 'publish', 'develop', 'basic_author', 'basic_publish', 'config', 'config_admin'];
 const OPS = {
@@ -14,6 +16,11 @@ const OPS = {
   adduser: ['Add org user', 'POST', 'Adds or updates a user of the organisation with a role. Needs config write permission.'],
 };
 
+// accepted input shapes: anything else is ignored (placeholder shown) and the field flagged
+const PATTERNS = {
+  org: /^[\w.-]+$/, site: /^[\w.-]+$/, ref: /^[\w.-]+$/, path: /^[\w.~/*-]*$/, email: /^[^\s@'"\\]+@[^\s@'"\\]+\.[^\s@'"\\]+$/,
+};
+
 const q = (s) => `'${String(s).replace(/'/g, "'\\''")}'`; // shell single-quote
 
 export default function decorate(block) {
@@ -22,54 +29,64 @@ export default function decorate(block) {
     const [k, v] = [...row.children].map((c) => c.textContent.trim());
     if (k && v) cfg[k.toLowerCase()] = v;
   });
-  const id = (n) => `admin-api-${n}-${Math.random().toString(36).slice(2, 6)}`;
+  const uid = Math.random().toString(36).slice(2, 6);
   const f = {};
-  block.innerHTML = '';
-  const form = document.createElement('div');
-  form.className = 'admin-api-form';
-  const field = (name, label, el) => {
-    el.id = id(name);
-    const w = document.createElement('div');
-    const l = document.createElement('label');
-    l.htmlFor = el.id;
-    l.textContent = label;
-    w.append(l, el);
-    f[name] = el;
+  const form = el('div', { class: 'admin-api-form' });
+  const field = (name, label, input) => {
+    input.id = `admin-api-${name}-${uid}`;
+    const w = el('div', null, el('label', { for: input.id }, label), input);
+    f[name] = input;
     form.append(w);
     return w;
   };
   [['org', 'Org', cfg.org || '', 'your-org'], ['site', 'Site', cfg.site || '', 'your-site'], ['ref', 'Ref', cfg.ref || 'main', 'main'], ['path', 'Path', cfg.path || '', '/docs/page']].forEach(([n, l, v, ph]) => {
-    const i = document.createElement('input');
-    Object.assign(i, {
-      type: 'text', value: v, placeholder: ph, autocomplete: 'off', spellcheck: false,
-    });
-    field(n, l, i);
+    field(n, l, el('input', {
+      type: 'text', value: v, placeholder: ph, autocomplete: 'off', spellcheck: 'false',
+    }));
   });
-  const op = document.createElement('select');
-  Object.entries(OPS).forEach(([k, v]) => op.append(new Option(v[0], k)));
+  const op = el('select', null, Object.entries(OPS).map(([k, v]) => new Option(v[0], k)));
   field('op', 'Operation', op);
-  const email = document.createElement('input');
-  Object.assign(email, { type: 'email', placeholder: 'person@example.com', autocomplete: 'off' });
+  const email = el('input', { type: 'email', placeholder: 'person@example.com', autocomplete: 'off' });
   const emailWrap = field('email', 'User email', email);
-  const role = document.createElement('select');
-  ROLES.forEach((r) => role.append(new Option(r, r)));
+  const role = el('select', null, ROLES.map((r) => new Option(r, r)));
   role.value = 'author';
   const roleWrap = field('role', 'Role', role);
 
-  const out = document.createElement('div');
-  out.className = 'admin-api-out';
-  out.innerHTML = '<div class="admin-api-meta"><span class="admin-api-method"></span><span class="admin-api-explain"></span></div><pre><code></code></pre><div class="admin-api-actions"><button type="button" class="button secondary">Copy</button><a target="_blank" rel="noopener noreferrer" href="https://www.aem.live/docs/admin.html">Admin API documentation</a><span role="status"></span></div><p class="admin-api-note">This page only builds the command. Never paste a token here: set it in your shell as <code>AEM_TOKEN</code>.</p>';
-  const code = out.querySelector('code');
-  const copy = out.querySelector('button');
-  const state = out.querySelector('[role="status"]');
+  const state = el('span', { role: 'status' });
+  const copy = el('button', { type: 'button', class: 'button secondary' }, 'Copy');
+  const code = el('code');
+  const method = el('span', { class: 'admin-api-method' });
+  const explain = el('span', { class: 'admin-api-explain' });
+  const out = el(
+    'div',
+    { class: 'admin-api-out' },
+    el('div', { class: 'admin-api-meta' }, method, explain),
+    el('pre', null, code),
+    el(
+      'div',
+      { class: 'admin-api-actions' },
+      copy,
+      el('a', { target: '_blank', rel: 'noopener noreferrer', href: 'https://www.aem.live/docs/admin.html' }, 'Admin API documentation'),
+      state,
+    ),
+    el('p', { class: 'admin-api-note' }, 'This page only builds the command. Never paste a token here: set it in your shell as ', el('code', null, 'AEM_TOKEN'), '.'),
+  );
+
+  // trimmed value if it matches its pattern, else '' (and the field is flagged)
+  const clean = (input, name) => {
+    const v = input.value.trim();
+    const ok = !v || PATTERNS[name].test(v);
+    input.setAttribute('aria-invalid', !ok);
+    return ok ? v : '';
+  };
 
   const update = () => {
-    const [, method, why] = OPS[op.value];
-    const enc = (s) => encodeURIComponent((s || '').trim());
-    const org = enc(f.org.value) || '{org}';
-    const site = enc(f.site.value) || '{site}';
-    const ref = enc(f.ref.value) || 'main';
-    let path = (f.path.value || '').trim().replace(/^\/+/, '').split('/').map(encodeURIComponent)
+    const [, verb, why] = OPS[op.value];
+    const enc = (s) => encodeURIComponent(s);
+    const org = enc(clean(f.org, 'org')) || '{org}';
+    const site = enc(clean(f.site, 'site')) || '{site}';
+    const ref = enc(clean(f.ref, 'ref')) || 'main';
+    let path = clean(f.path, 'path').replace(/^\/+/, '').split('/').map(encodeURIComponent)
       .join('/')
       .replace('%2A', '*');
     if (op.value === 'code' && !path) path = '*';
@@ -85,17 +102,16 @@ export default function decorate(block) {
     roleWrap.hidden = !adding;
     f.path.closest('div').hidden = !seg;
     f.ref.closest('div').hidden = !seg;
-    if (adding) f.site.closest('div').hidden = true;
-    else f.site.closest('div').hidden = false;
-    let cmd = `curl${method === 'GET' ? '' : ` -X ${method}`} ${q(url)} \\\n  -H "x-auth-token: $AEM_TOKEN"`;
+    f.site.closest('div').hidden = adding;
+    let cmd = `curl${verb === 'GET' ? '' : ` -X ${verb}`} ${q(url)} \\\n  -H "x-auth-token: $AEM_TOKEN"`;
     if (adding) {
-      const body = JSON.stringify({ email: email.value.trim() || 'person@example.com', roles: [role.value] });
+      const body = JSON.stringify({ email: clean(email, 'email') || 'person@example.com', roles: [role.value] });
       cmd += ` \\\n  -H 'Content-Type: application/json' \\\n  --data ${q(body)}`;
     }
     code.textContent = cmd;
-    out.querySelector('.admin-api-method').textContent = method;
-    out.querySelector('.admin-api-method').dataset.method = method;
-    out.querySelector('.admin-api-explain').textContent = why;
+    method.textContent = verb;
+    method.dataset.method = verb;
+    explain.textContent = why;
   };
   form.addEventListener('input', update);
   copy.addEventListener('click', async () => {
@@ -111,6 +127,6 @@ export default function decorate(block) {
     }
     setTimeout(() => { state.textContent = ''; }, 2500);
   });
-  block.append(form, out);
+  block.replaceChildren(form, out);
   update();
 }

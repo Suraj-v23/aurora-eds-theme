@@ -26,7 +26,7 @@
     radial-gradient(60% 80% at 80% 0%, color-mix(in srgb, var(--accent-3) 35%, transparent), transparent 60%),
     radial-gradient(50% 70% at 10% 10%, color-mix(in srgb, var(--accent-color) 45%, transparent), transparent 60%),
     var(--night-color);
-  color: #fff;
+  color: var(--on-media);
   font-weight: 600;
   cursor: pointer;
 }
@@ -41,7 +41,7 @@
   background-color: var(--accent-color);
   color: var(--on-accent);
   font-size: 24px;
-  transition: transform 0.2s;
+  transition: transform var(--duration);
 }
 
 .embed .embed-play:hover::before {

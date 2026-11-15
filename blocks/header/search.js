@@ -1,17 +1,18 @@
 import { loadCSS, getMetadata } from '../../scripts/aem.js';
+import {
+  el, slugify, safeUrl, escapeRegExp, fetchIndex, createDialog, openDialog,
+} from '../../scripts/utils.js';
 
 const base = window.hlx.codeBasePath;
-const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const text = (el, max = 160) => el.textContent.replace(/\s+/g, ' ').trim().slice(0, max);
+const text = (n, max = 160) => n.textContent.replace(/\s+/g, ' ').trim().slice(0, max);
 let index;
 let dialog;
 
 /** Preferred source: the EDS query index ({data: [{path, title, description}]}). */
 async function fromQueryIndex() {
-  const resp = await fetch(`${base}/query-index.json`);
-  const { data } = await resp.json();
-  if (!Array.isArray(data) || !data.length) throw new Error('empty index');
-  return data.map((d) => ({ path: d.path, title: d.title || d.path, desc: d.description || '' }));
+  const data = await fetchIndex();
+  if (!data.length) throw new Error('empty index');
+  return data;
 }
 
 /** Fallback: crawl the pages linked from the header nav and the sidebar fragments. */
@@ -40,7 +41,7 @@ async function crawl() {
       doc.querySelectorAll('h2, h3').forEach((h) => {
         const next = h.nextElementSibling;
         out.push({
-          path: `${path}#${h.id || slug(h.textContent)}`,
+          path: `${path}#${h.id || slugify(h.textContent)}`,
           title: text(h, 80),
           desc: next && next.tagName === 'P' ? text(next) : title,
         });
@@ -59,13 +60,13 @@ async function load() {
 }
 
 /** Wraps matched words in <mark>; built with DOM nodes so content is never parsed as HTML. */
-function highlight(el, str, words) {
-  el.textContent = '';
-  if (!words.length) { el.textContent = str; return; }
-  const re = new RegExp(`(${words.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')})`, 'ig');
+function highlight(node, str, words) {
+  node.textContent = '';
+  if (!words.length) { node.textContent = str; return; }
+  const re = new RegExp(`(${words.map(escapeRegExp).join('|')})`, 'ig');
   str.split(re).forEach((part, i) => {
-    if (i % 2) el.append(Object.assign(document.createElement('mark'), { textContent: part }));
-    else if (part) el.append(part);
+    if (i % 2) node.append(el('mark', null, part));
+    else if (part) node.append(part);
   });
 }
 
@@ -85,9 +86,7 @@ function search(entries, q) {
 }
 
 function build() {
-  dialog = document.createElement('dialog');
-  dialog.className = 'site-search';
-  dialog.setAttribute('aria-label', 'Search the site');
+  dialog = createDialog('site-search', 'Search the site');
   dialog.innerHTML = `<div class="ss-bar">
       <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
       <input type="text" role="combobox" aria-expanded="true" aria-controls="ss-list" aria-autocomplete="list" placeholder="Search pages and headings" aria-label="Search" autocomplete="off" spellcheck="false">
@@ -115,18 +114,11 @@ function build() {
     const { words, hits } = search(await load(), input.value.trim());
     list.textContent = '';
     hits.forEach((e, n) => {
-      const li = document.createElement('li');
-      li.id = `ss-${n}`;
-      li.setAttribute('role', 'option');
-      const a = document.createElement('a');
-      a.href = e.path;
-      a.tabIndex = -1;
-      const [t, d, p] = ['strong', 'span', 'small'].map((tag) => a.appendChild(document.createElement(tag)));
+      const [t, d, p] = ['strong', 'span', 'small'].map((tag) => el(tag));
       highlight(t, e.title, words);
       highlight(d, e.desc, words);
       p.textContent = e.path;
-      li.append(a);
-      list.append(li);
+      list.append(el('li', { id: `ss-${n}`, role: 'option' }, el('a', { href: safeUrl(e.path) || '#', tabindex: -1 }, t, d, p)));
     });
     empty.hidden = hits.length > 0;
     list.hidden = !hits.length;
@@ -150,7 +142,6 @@ function build() {
     const li = e.target.closest('li');
     if (li && li !== list.children[active]) select([...list.children].indexOf(li));
   });
-  dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
   dialog.render = render;
   document.body.append(dialog);
 }
@@ -162,11 +153,9 @@ export async function openSearch(opener) {
     build();
   }
   if (dialog.open) return;
-  dialog.showModal();
-  const input = dialog.querySelector('input');
-  input.select();
+  openDialog(dialog, opener);
+  dialog.querySelector('input').select();
   dialog.render();
-  dialog.addEventListener('close', () => opener?.focus(), { once: true });
 }
 
-export { search, slug };
+export { search };

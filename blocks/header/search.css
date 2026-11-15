@@ -20,7 +20,7 @@ dialog.site-search:not([open]) {
 }
 
 dialog.site-search::backdrop {
-  background: rgb(0 0 0 / 55%);
+  background: var(--overlay-color);
   backdrop-filter: blur(3px);
 }
 
@@ -49,7 +49,7 @@ dialog.site-search::backdrop {
 
 .site-search kbd {
   border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border-radius: var(--radius-s);
   padding: 2px 6px;
   background: var(--light-color);
   color: var(--dark-color);

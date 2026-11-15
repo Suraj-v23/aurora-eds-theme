@@ -1,7 +1,9 @@
+import { prefersReducedMotion } from '../../scripts/utils.js';
+
 /* Stats: each row = one stat. Column 1 = number, column 2 = label. Numbers count up. */
 function countUp(el) {
   const match = el.textContent.trim().match(/^(\D*)(\d+)(.*)$/s);
-  if (!match || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!match || prefersReducedMotion()) return;
   const [, prefix, digits, suffix] = match;
   const target = Number(digits);
   const start = performance.now();

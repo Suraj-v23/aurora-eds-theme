@@ -24,7 +24,7 @@
   position: absolute;
   top: -14px;
   left: 28px;
-  border-radius: 99px;
+  border-radius: var(--radius-pill);
   padding: 4px 14px;
   background: var(--gradient);
   color: var(--on-accent);
