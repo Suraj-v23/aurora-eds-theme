@@ -50,7 +50,8 @@ ORIGIN="${2:-https://suraj-v23.github.io}"
 cp docs/screenshot.png "$OUT/og-image.png"
 node - "$OUT" "$BASE" "$ORIGIN" <<'JS'
 const fs = require('fs');
-const [out, base, origin] = process.argv.slice(2);
+const [out, base] = process.argv.slice(2);
+const origin = process.argv[4].toLowerCase();
 const pages = ['index.html', 'library/index.html', 'docs/index.html', 'developer/index.html'];
 const urls = pages.map((p) => {
   const file = `${out}/${p}`;
